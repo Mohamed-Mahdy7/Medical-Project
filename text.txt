@@ -1,0 +1,84 @@
+medical_appointment/
+├── manage.py
+├── requirements.txt
+├── .env.example
+├── README.md
+│
+├── medical_project/                          # Project-level settings
+│   ├── __init__.py
+│   ├── settings/
+│   │   ├── __init__.py
+│   │   ├── base.py                  # Shared settings
+│   │   ├── development.py           # Dev overrides (SQLite, console email)
+│   │   └── production.py            # Prod overrides (PostgreSQL, SMTP)
+│   ├── urls.py                      # Root URL dispatcher
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── core/                            # Cross-cutting utilities
+│   ├── __init__.py
+│   ├── permissions.py               # IsAdmin, IsDoctor, IsPatient, IsApproved   [Yahya]
+│   ├── exceptions.py                # Centralized DRF exception handler           [Yahya]
+│   ├── responses.py                 # Consistent { status, message, data }        [Yahya]
+│   ├── pagination.py                # PageNumberPagination config                 [Yamen]
+│   └── tests/
+│       └── test_permissions.py      # Permission class unit tests                 [Yahya]
+│
+│
+│   │
+│   ├── users/                       # Owner: Mohamed Mahdy
+│   │   ├── __init__.py
+│   │   ├── models.py                # Custom User (AbstractUser + role)
+│   │   ├── managers.py              # CustomUserManager
+│   │   ├── serializers.py           # Register, Login, ChangePassword serializers
+│   │   ├── views.py                 # Auth endpoints (register, login, refresh, logout)
+│   │   ├── urls.py                  # /auth/...
+│   │   ├── admin.py                 # Register User in Django Admin
+│   │   └── tests/
+│   │       └── test_auth.py
+│   │
+│   ├── doctors/                     # Owner: Mohamed Nasef
+│   │   ├── __init__.py
+│   │   ├── models.py                # DoctorProfile, Specialty
+│   │   ├── serializers.py
+│   │   ├── views.py                 # Doctor profile, list, detail, specialty CRUD
+│   │   ├── urls.py                  # /doctors/..., /specialties/...
+│   │   ├── filters.py               # Name / specialty filter
+│   │   ├── admin.py
+│   │   └── tests/
+│   │       └── test_doctors.py
+│   │
+│   ├── patients/                    # Owner: Yamen Aly
+│   │   ├── __init__.py
+│   │   ├── models.py                # PatientProfile
+│   │   ├── serializers.py
+│   │   ├── views.py                 # Profile get/update, slot generation endpoint
+│   │   ├── urls.py                  # /patients/..., /doctors/{id}/slots/
+│   │   ├── utils.py                 # Slot generation logic
+│   │   ├── admin.py
+│   │   └── tests/
+│   │       └── test_patients_slots.py
+│   │
+│   ├── availability/                # Owner: Zahwaa Kandeel
+│   │   ├── __init__.py
+│   │   ├── models.py                # DoctorAvailability
+│   │   ├── serializers.py
+│   │   ├── views.py                 # Doctor manages own schedule
+│   │   ├── urls.py                  # /doctors/me/availability/...
+│   │   ├── validators.py            # Overlap validation logic
+│   │   ├── admin.py
+│   │   └── tests/
+│   │       └── test_availability.py
+│   │
+│   ├── appointments/                # Owner: Ahmed Yahya
+│   │   ├── models.py                # Appointment
+│   │   ├── serializers.py           # Booking serializer (double-booking guard)
+│   │   ├── views.py                 # Book, list, detail, cancel, reschedule, status
+│   │   ├── urls.py                  # /appointments/...
+│   │   ├── notifications.py         # Email send helpers (wrapped in try/except)
+│   │   ├── admin.py
+│   │   └── tests/
+│   │       ├── test_booking.py
+│   │       └── test_notifications.py
+│
+└── conftest.py                      # Shared pytest fixtures & factories          [Yahya]

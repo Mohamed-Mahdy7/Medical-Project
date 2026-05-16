@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u20%95h7utjj^%a_i@b33-ik$c)ny2^9^08620+@v)n@pavv8d'
+SECRET_KEY = 'django-insecure-7(7)j40svt+j4etr_wkfda4rsz53x%u8yygel=!-by6k#@y8vu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'accounts',
+    'appointments',
+    'availability',
+    'core',
+    'doctors',
+    'patients',
 ]
 
 MIDDLEWARE = [
@@ -72,12 +83,19 @@ WSGI_APPLICATION = 'medical_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+password = os.getenv('passwrod')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'medical_project',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PORT': 5432,
+        'PASSWORD': password,
     }
 }
+
 
 
 # Password validation
@@ -115,3 +133,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FormParser',
+        
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "core.authentication.CookieJWTAuthentication",
+    ]
+}
