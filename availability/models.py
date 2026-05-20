@@ -1,5 +1,5 @@
 from django.db import models
-from doctors.models import Doctor
+from doctors.models import DoctorProfile
 # Create your models here.
 class Availability(models.Model):
     class DayOfWeek(models.IntegerChoices):
@@ -12,7 +12,7 @@ class Availability(models.Model):
         SUNDAY    = 6, 'Sunday'
 
     doctor = models.ForeignKey(
-        Doctor, on_delete = models.CASCADE
+        DoctorProfile, on_delete = models.CASCADE
     )
     day_of_week = models.IntegerField(choices=DayOfWeek.choices)
     start_time = models.DateTimeField()
