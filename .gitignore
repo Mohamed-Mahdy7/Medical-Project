@@ -1,2 +1,6 @@
 *env
 __pycache__
+.dockerignore
+Dockerfile
+docker-compose.yml
+structure.txt
