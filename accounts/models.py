@@ -4,7 +4,6 @@ from django.db import models
 # Create your models here.
 class User(AbstractUser):
     class Roles(models.TextChoices):
-        ADMIN="A", "ADMIN"
         DOCTOR="D", "DOCTOR"
         PATIENT="P", "PATIENT"
     email = models.EmailField(unique=True)
