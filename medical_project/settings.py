@@ -85,11 +85,15 @@ WSGI_APPLICATION = 'medical_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+<<<<<<< Updated upstream
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT=os.getenv("DB_PORT")
+=======
+password = os.getenv('password')
+>>>>>>> Stashed changes
 
 DATABASES = {
     'default': {
