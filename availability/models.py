@@ -11,8 +11,7 @@ class Availability(models.Model):
         SATURDAY  = 5, 'Saturday'
         SUNDAY    = 6, 'Sunday'
 
-    id = models.AutoField(primary_key=True)
-    doctor_id = models.ForeignKey(
+    doctor = models.ForeignKey(
         Doctor, on_delete = models.CASCADE
     )
     day_of_week = models.IntegerField(choices=DayOfWeek.choices)
