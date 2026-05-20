@@ -2,6 +2,10 @@ from django.db import models
 
 from django.conf import settings
 
+from patients.models import Patient
+
+from doctors.models import DoctorProfile
+
 class Appointment(models.Model):
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
@@ -10,12 +14,12 @@ class Appointment(models.Model):
         COMPLETED = "COMPLETED", "Completed"
 
     patient = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        Patient,
         on_delete=models.CASCADE,
         related_name="patient_appointments",
     )
     doctor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        DoctorProfile,
         on_delete=models.CASCADE,
         related_name="doctor_appointments",
     )
