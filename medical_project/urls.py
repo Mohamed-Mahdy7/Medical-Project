@@ -22,4 +22,5 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('patients/', include('patients.urls'))
+    ,path('api/', include('doctors.urls')),
 ]
