@@ -1,8 +1,8 @@
 import uuid
 
 from django.db import models
-
-from django.conf import settings
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from patients.models import Patient
 
@@ -31,7 +31,7 @@ class Appointment(models.Model):
         on_delete=models.CASCADE,
         related_name="doctor_appointments",
     )
-    notes = models.TextField(blank=True)
+    notes = models.TextField(null=True, blank=True)
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
@@ -42,5 +42,39 @@ class Appointment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = "appointments"
+        verbose_name = "Appointment"
+        verbose_name_plural= "Appointments"
+
+        ordering = ["start_time"]
+
+        indexes = [
+            models.Index(fields=["patient"], name="patient_appointment_index"),
+            models.Index(fields=["doctor", "status"], name="appointment_doctor_status_index"),
+            models.Index(fields=["patient", "status"], name="appointment_patient_status_index"),
+            models.Index(fields=["start_time"], name="appointment_start_time_index"),
+        ]
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["doctor", "start_time"],
+                condition = ~models.Q(status="CANCELLED"),
+                name="unique_doctor_appointment_time"
+            )
+        ]
+
+    def clean(self):
+        if self.start_time and self.end_time:
+            if self.end_time <= self.start_time:
+                raise ValidationError("end_time must be after start_time.")
+
+        if self.start_time and self.start_time < timezone.now():
+            raise ValidationError("Appointment cannot be booked in the past.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.patient} -> {self.doctor}"
+        return f"{self.patient} -> {self.doctor} | {self.start_time}"
