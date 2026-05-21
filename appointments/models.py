@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from django.conf import settings
@@ -7,6 +9,12 @@ from patients.models import Patient
 from doctors.models import DoctorProfile
 
 class Appointment(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
         CONFIRMED = "CONFIRMED", "Confirmed"
@@ -23,13 +31,14 @@ class Appointment(models.Model):
         on_delete=models.CASCADE,
         related_name="doctor_appointments",
     )
-    appointment_date = models.DateTimeField()
     notes = models.TextField(blank=True)
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
         default=Status.PENDING,
     )
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
