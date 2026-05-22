@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import PatientView
 
 urlpatterns = [
-    # path('', views.index, name='index'),
+    path('patients/me/', PatientView.as_view(), name='patient-profile')
 ]
