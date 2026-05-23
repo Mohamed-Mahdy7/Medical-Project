@@ -20,7 +20,8 @@ from .serializers import (
     DoctorDetailSerializer,
     DoctorCreateUpdateSerializer
 )
-
+from rest_framework.generics import CreateAPIView
+from rest_framework.generics import DestroyAPIView
 
 class SpecialtyListView(ListAPIView):
 
@@ -97,3 +98,14 @@ class DoctorMeView(RetrieveUpdateAPIView):
     def get_object(self):
 
         return self.request.user.doctor_profile
+    
+
+ 
+
+class DoctorDeleteView(DestroyAPIView):
+
+    queryset = DoctorProfile.objects.all()
+
+    serializer_class = DoctorDetailSerializer
+
+    permission_classes = [IsAuthenticated]
