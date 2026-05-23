@@ -2,21 +2,41 @@ from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import AppointmentSerializer
+from .serializers import (
+    AppointmentDetailSerializer,
+    AppointmentCreateSerializer
+)
+from .models import Appointment
 
 class AppointmentViewSet(ModelViewSet):
-    serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
 
-        if user.role == user.Roles.DOCTOR:
-            return Appointment.objects.filter(doctor=user)
-        elif user.role == user.Roles.PATIENT:
-            return appointment.objects.filter(patient=user)
+        if user.is_staff:
+            return Appointment.objects.select_related(
+                "patient__user", "doctor__user", "doctor__specialty"
+            ).all()
 
-        return Appointment.objects.all()
+        if user.role == "P":
+            return Appointment.objects.select_related(
+                "patient__user", "doctor__user", "doctor__specialty"
+            ).filter(patient=user.patient_profile)
 
-    def perform_create(self, serializer):
-        serializer.save(patient=self.request.user)
+        if user.role == "D":
+            return Appointment.objects.select_related(
+                "patient__user", "doctor__user", "doctor__specialty"
+            ).filter(doctor=user.doctor_profile)
+
+        return Appointment.objects.none()
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return AppointmentCreateSerializer
+        return AppointmentDetailSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
