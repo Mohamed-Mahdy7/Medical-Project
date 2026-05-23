@@ -51,8 +51,8 @@ class Appointment(models.Model):
 
         indexes = [
             models.Index(fields=["patient"], name="patient_appointment_index"),
-            models.Index(fields=["doctor", "status"], name="appointment_doctor_status_index"),
-            models.Index(fields=["patient", "status"], name="appointment_patient_status_index"),
+            models.Index(fields=["doctor", "status"], name="appointment_doctor_status_idx"),
+            models.Index(fields=["patient", "status"], name="appointment_patient_status_idx"),
             models.Index(fields=["start_time"], name="appointment_start_time_index"),
         ]
 
@@ -71,6 +71,21 @@ class Appointment(models.Model):
 
         if self.start_time and self.start_time < timezone.now():
             raise ValidationError("Appointment cannot be booked in the past.")
+
+        if self.start_time and self.end_time and self.doctor_id:
+            overlapping = Appointment.objects.filter(
+                doctor=self.doctor_id,
+                start_time__lt=self.end_time,
+                end_time__gt=self.start_time,
+            ).exclude(status=Appointment.Status.CANCELLED)
+
+            if self.pk:
+                overlapping = overlapping.exclude(pk=self.pk)
+            
+            if overlapping.exists():
+                raise ValidationError(
+                    "This doctor already has an appointment at this time"
+                )
 
     def save(self, *args, **kwargs):
         self.full_clean()
