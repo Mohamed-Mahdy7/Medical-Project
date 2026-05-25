@@ -20,6 +20,7 @@ class AppointmentDetailSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+        read_only_fields = ["id", "created_at", "updated_at", "status"]
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,7 +49,8 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
         if not availability:
             raise serializers.ValidationError(
-                "The doctor is not available on this day."
+                f"The doctor is not available on this day. "
+                f"Available days are based on the doctor's schedule."
             )
 
         slot_start = start_time.time()
@@ -58,8 +60,23 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
         if slot_start < avail_start or slot_end > avail_end:
             raise serializers.ValidationError(
-                "The selected slot is outside the doctor's available hours."
+                f"The selected slot is outside the doctor's available hours. "
+                f"Available hours are {avail_start.strftime('%I:%M %p')} - "
+                f"{avail_end.strftime('%I:%M %p')}."
+            )
+        
+        expected_duration = timedelta(minutes=availability.slot_duration_minutes)
+        actual_duration   = end_time - start_time
+
+        if actual_duration != expected_duration:
+            raise serializers.ValidationError(
+                f"Appointment duration must be exactly {availability.slot_duration_minutes} minutes."
             )
 
         return attrs
         
+    def create(self, validated_data):
+        request = self.context.get("request")
+        patient = request.user.patient_profile
+
+        return Appointment.objects.create(patient=patient, **validated_data)

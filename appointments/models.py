@@ -1,20 +1,12 @@
-import uuid
-
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from patients.models import Patient
+from patients.models import PatientProfile
 
 from doctors.models import DoctorProfile
 
 class Appointment(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
-
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
         CONFIRMED = "CONFIRMED", "Confirmed"
@@ -22,7 +14,7 @@ class Appointment(models.Model):
         COMPLETED = "COMPLETED", "Completed"
 
     patient = models.ForeignKey(
-        Patient,
+        PatientProfile,
         on_delete=models.CASCADE,
         related_name="patient_appointments",
     )
@@ -57,6 +49,7 @@ class Appointment(models.Model):
         ]
 
         constraints = [
+            # Prevent double booking: same doctor can't have two non-cancelled appointments at the same time
             models.UniqueConstraint(
                 fields=["doctor", "start_time"],
                 condition = ~models.Q(status="CANCELLED"),
@@ -65,16 +58,19 @@ class Appointment(models.Model):
         ]
 
     def clean(self):
+        # end_time must always be after start_time
         if self.start_time and self.end_time:
             if self.end_time <= self.start_time:
                 raise ValidationError("end_time must be after start_time.")
 
-        if self.start_time and self.start_time < timezone.now():
+        # Only check past time on new appointments, not on updating old ones (e.g. changing status from confirmed to completed)
+        if self.start_time and self.start_time < timezone.now() and not self.pk:
             raise ValidationError("Appointment cannot be booked in the past.")
 
+        # Prevent overlapping appointments for the same doctor
         if self.start_time and self.end_time and self.doctor_id:
             overlapping = Appointment.objects.filter(
-                doctor=self.doctor_id,
+                doctor_id=self.doctor_id,
                 start_time__lt=self.end_time,
                 end_time__gt=self.start_time,
             ).exclude(status=Appointment.Status.CANCELLED)

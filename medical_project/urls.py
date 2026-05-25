@@ -7,7 +7,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('user/', include('accounts.urls')),
-    path('api/', include('patients.urls')),
+    path('patients/', include('patients.urls')),
     path('availability/', include('availability.urls')),
     path("appointments/", include("appointments.urls")),
 ]

@@ -1,12 +1,20 @@
 from rest_framework.viewsets import ModelViewSet
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .serializers import (
     AppointmentDetailSerializer,
     AppointmentCreateSerializer
 )
+from .permissions import (
+    IsPatient,
+    IsDoctor,
+    IsAppointmentOwnerPatient,
+    IsAppointmentOwnerDoctor,
+    CanModifyAppointment,
+)
 from .models import Appointment
+
 
 class AppointmentViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -30,6 +38,15 @@ class AppointmentViewSet(ModelViewSet):
             ).filter(doctor=user.doctor_profile)
 
         return Appointment.objects.none()
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [IsPatient()]
+
+        if self.action in ["retrieve", "list"]:
+            return [IsAuthenticated()]
+
+        return [IsAuthenticated()]
 
     def get_serializer_class(self):
         if self.action == "create":
