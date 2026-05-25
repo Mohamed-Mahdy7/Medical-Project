@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Availability
 from .serializers import AvailabilitySerializer
 from appointments.permissions import IsDoctor
+from rest_framework.exceptions import ValidationError
 
 
 class AvailabilityViewSet(ModelViewSet):
@@ -23,4 +24,33 @@ class AvailabilityViewSet(ModelViewSet):
         return Availability.objects.all()
 
     def perform_create(self, serializer):
+        self._validate_business_rules(serializer.validated_data)
         serializer.save(doctor=self.request.user.doctorprofile)
+
+    def perform_update(self, serializer):
+        self._validate_business_rules(serializer.validated_data)
+        serializer.save()
+
+    def _validate_business_rules(self, data):
+        start = data['start_time']
+        end = data['end_time']
+        doctor = self.request.user.doctorprofile
+
+        if start >= end:
+            raise ValidationError("Start must be before end.")
+
+        if start.date() != end.date():
+            raise ValidationError("Start and end must be on the same day.")
+
+        if start.weekday() != data['day_of_week']:
+            raise ValidationError("Day of week does not match date.")
+
+        overlapping = Availability.objects.filter(
+            doctor=doctor,
+            day_of_week=data['day_of_week'],
+            start_time__lt=end,
+            end_time__gt=start
+        )
+
+        if overlapping.exists():
+            raise ValidationError("This time overlaps with existing availability.")
