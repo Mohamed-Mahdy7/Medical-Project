@@ -1,4 +1,5 @@
 from django.utils.timezone import now
+from appointments.permissions import IsDoctor
 
 from rest_framework.viewsets import (
     ModelViewSet,
@@ -34,11 +35,6 @@ from .serializers import (
     DoctorAppointmentSerializer
 )
 
-from .permissions import (
-    IsDoctorOwnerOrAdmin
-)
-
-
 class SpecialtyViewSet(
     ReadOnlyModelViewSet
 ):
@@ -58,7 +54,7 @@ class DoctorViewSet(ModelViewSet):
     )
 
     permission_classes = [
-        IsDoctorOwnerOrAdmin
+        IsDoctor
     ]
 
 
