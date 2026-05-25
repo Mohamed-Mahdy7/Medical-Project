@@ -4,7 +4,6 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
-
 from .models import Specialty, DoctorProfile
 from .serializers import (
     SpecialtySerializer,
