@@ -21,6 +21,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+<<<<<<< HEAD
     path('patients/', include('patients.urls'))
     ,path('api/', include('doctors.urls')),
+=======
+    path('patients/', include('patients.urls')),
+    path('availability/', include('availability.urls')),
+    path("appointments/", include("appointments.urls")),
+>>>>>>> 110e60bc45aa46391615ae5161945302402c4df6
 ]
