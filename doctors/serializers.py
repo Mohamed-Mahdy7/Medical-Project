@@ -5,29 +5,36 @@ from .models import (
     DoctorProfile
 )
 
+from appointments.models import (
+    Appointment
+)
 
-class SpecialtySerializer(serializers.ModelSerializer):
+
+class SpecialtySerializer(
+    serializers.ModelSerializer
+):
 
     class Meta:
 
         model = Specialty
 
-        fields = '__all__'
+        fields = [
+            'id',
+            'name',
+            'description'
+        ]
 
 
-class DoctorListSerializer(serializers.ModelSerializer):
+class DoctorListSerializer(
+    serializers.ModelSerializer
+):
 
     full_name = serializers.CharField(
         source='user.get_full_name',
         read_only=True
     )
 
-    email = serializers.EmailField(
-        source='user.email',
-        read_only=True
-    )
-
-    specialty = serializers.CharField(
+    specialty_name = serializers.CharField(
         source='specialty.name',
         read_only=True
     )
@@ -39,14 +46,19 @@ class DoctorListSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'full_name',
-            'email',
-            'specialty',
+            'specialty_name',
             'years_of_experience',
             'profile_picture'
         ]
 
 
-class DoctorDetailSerializer(serializers.ModelSerializer):
+class DoctorDetailSerializer(
+    serializers.ModelSerializer
+):
+
+    specialty = SpecialtySerializer(
+        read_only=True
+    )
 
     full_name = serializers.CharField(
         source='user.get_full_name',
@@ -58,8 +70,22 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    specialty = SpecialtySerializer(
-        read_only=True
+    class Meta:
+
+        model = DoctorProfile
+
+        fields = '__all__'
+
+
+class DoctorUpdateSerializer(
+    serializers.ModelSerializer
+):
+
+    specialty_id = serializers.PrimaryKeyRelatedField(
+
+        queryset=Specialty.objects.all(),
+
+        source='specialty'
     )
 
     class Meta:
@@ -67,37 +93,22 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
         model = DoctorProfile
 
         fields = [
-            'id',
-            'full_name',
-            'email',
-            'specialty',
+
+            'specialty_id',
+
             'bio',
+
             'phone',
+
             'profile_picture',
-            'years_of_experience',
-            'is_approved',
-            'is_blocked',
-            'created_at'
-        ]
 
-
-class DoctorCreateUpdateSerializer(
-    serializers.ModelSerializer
-):
-
-    class Meta:
-
-        model = DoctorProfile
-
-        fields = [
-            'specialty',
-            'bio',
-            'phone',
-            'profile_picture',
             'years_of_experience'
         ]
 
-    def validate_phone(self, value):
+    def validate_phone(
+        self,
+        value
+    ):
 
         if len(value) != 11:
 
@@ -106,3 +117,36 @@ class DoctorCreateUpdateSerializer(
             )
 
         return value
+
+
+class DoctorAppointmentSerializer(
+    serializers.ModelSerializer
+):
+
+    patient_name = serializers.CharField(
+
+        source='patient.user.get_full_name',
+
+        read_only=True
+    )
+
+    class Meta:
+
+        model = Appointment
+
+        fields = [
+
+            'id',
+
+            'patient_name',
+
+            'date',
+
+            'start_time',
+
+            'end_time',
+
+            'status',
+
+            'note'
+        ]
