@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from patients.models import Patient
+from patients.models import PatientProfile
 
 from doctors.models import DoctorProfile
 
@@ -14,7 +14,7 @@ class Appointment(models.Model):
         COMPLETED = "COMPLETED", "Completed"
 
     patient = models.ForeignKey(
-        Patient,
+        PatientProfile,
         on_delete=models.CASCADE,
         related_name="patient_appointments",
     )
