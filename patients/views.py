@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from appointments.permissions import IsPatient
 from .models import PatientProfile
 from .serializers import PatientProfileSerializer
@@ -11,6 +12,8 @@ class PatientProfileViewSet(ModelViewSet):
 
     permission_classes = [IsPatient]
     serializer_class = PatientProfileSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['gender']
 
     http_method_names = ['get', 'put', 'patch', 'head', 'options']
 
