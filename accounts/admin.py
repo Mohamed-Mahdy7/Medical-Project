@@ -5,12 +5,10 @@ from .models import User
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
-        (
-            None,
+        (None,
             {
                 "classes": ("wide",),
                 "fields": ("username", "usable_password", "password1", "password2", "email",
                             "first_name", "last_name", "role", "is_approved", "is_blocked"),
             },
-        ),
-    )
+        ),)

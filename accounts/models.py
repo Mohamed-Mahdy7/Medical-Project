@@ -13,3 +13,6 @@ class User(AbstractUser):
     is_approved = models.BooleanField(default=True)
     is_blocked = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
