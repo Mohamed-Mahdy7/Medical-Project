@@ -32,25 +32,24 @@ class AvailabilityViewSet(ModelViewSet):
         serializer.save()
 
     def _validate_business_rules(self, data):
-        start = data['start_time']
-        end = data['end_time']
-        doctor = self.request.user.doctorprofile
+            start = data['start_time']
+            end = data['end_time']
 
-        if start >= end:
-            raise ValidationError("Start must be before end.")
+            doctor = self.request.user.doctorprofile
 
-        if start.date() != end.date():
-            raise ValidationError("Start and end must be on the same day.")
+            if start >= end:
+                raise ValidationError("Start must be before end.")
 
-        if start.weekday() != data['day_of_week']:
-            raise ValidationError("Day of week does not match date.")
+            if start.date() != end.date():
+                raise ValidationError("Start and end must be on the same day.")
 
-        overlapping = Availability.objects.filter(
-            doctor=doctor,
-            day_of_week=data['day_of_week'],
-            start_time__lt=end,
-            end_time__gt=start
-        )
+            if start.weekday() != data['day_of_week']:
+                raise ValidationError("Selected weekday does not match date.")
 
-        if overlapping.exists():
-            raise ValidationError("This time overlaps with existing availability.")
+            if Availability.objects.filter(
+                doctor=doctor,
+                day_of_week=data['day_of_week'],
+                start_time__lt=end,
+                end_time__gt=start
+            ).exists():
+                raise ValidationError("Overlapping availability is not allowed.")
