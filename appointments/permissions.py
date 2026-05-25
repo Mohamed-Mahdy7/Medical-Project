@@ -1,7 +1,5 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from appointments.models import Appointment
-
 class IsPatient(BasePermission):
     message = "Only patients can perform this action."
 
@@ -19,31 +17,37 @@ class IsDoctor(BasePermission):
 class IsAppointmentOwnerPatient(BasePermission):
     message = "You can only access your own appointments."
 
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == "P"
+
     def has_object_permission(self, request, view, obj):
-        return request.user.is_authenticated and request.user.role == "P" and obj.patient.user == request.user
+        return obj.patient.user == request.user
 
 
 class IsAppointmentOwnerDoctor(BasePermission):
     message = "You can only access your own appointments."
 
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == "D"
+
     def has_object_permission(self, request, view, obj):
-        return request.user.is_authenticated and request.user.role == "D" and obj.doctor.user == request.user
+        return obj.doctor.user == request.user
 
 
 class CanModifyAppointment(BasePermission):
     message = "You do not have permission to modify this appointment."
 
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
+
     def has_object_permission(self, request, view, obj):
         user = request.user
-
-        if not user.is_authenticated:
-            return False
 
         if user.is_staff:
             return True
 
         if user.role == "P":
-            return obj.patient.user == user and obj.status == Appointment.Status.PENDING
+            return obj.patient.user == user and obj.status == "PENEDING"
 
         if user.role == "D":
             return obj.doctor.user == user
