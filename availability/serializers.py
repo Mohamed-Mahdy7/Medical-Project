@@ -1,49 +1,47 @@
 from rest_framework import serializers
 from .models import Availability, DoctorProfile
 
-class AvailabilitySerializer(serializers.Serializer):
-    doctor = serializers.PrimaryKeyRelatedField(queryset = DoctorProfile.objects.all())
-    day_of_week = serializers.ChoiceField(choices=Availability.DayOfWeek.choices)
-    start_time = serializers.DateTimeField()
-    end_time = serializers.DateTimeField()
-    slot_duration_minutes = serializers.IntegerField(min_value = 1)
-    is_active = serializers.BooleanField(default=True)
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'is_active']
+        read_only_fields = ['id']
 
-def create(self, validated_data):
-    return Availability.objects.create(**validated_data)
+    def validate(self, data):
+        request = self.context.get('request')
+        doctor = request.user.doctorprofile
 
-def update(self, instance, validated_data):
+        start = data.get('start_time', getattr(self.instance, 'start_time', None))
+        end = data.get('end_time', getattr(self.instance, 'end_time', None))
+        day = data.get('day_of_week', getattr(self.instance, 'day_of_week', None))
 
-    instance.doctor = validated_data.get(
-        'doctor',
-        instance.doctor
-    )
+        if start >= end:
+            raise serializers.ValidationError("Start time must be before end time.")
 
-    instance.day_of_week = validated_data.get(
-        'day_of_week',
-        instance.day_of_week
-    )
+        qs = Availability.objects.filter(
+            doctor=doctor,
+            day_of_week=day,
+            start_time__lt=end,
+            end_time__gt=start
+        )
 
-    instance.start_time = validated_data.get(
-        'start_time',
-        instance.start_time
-    )
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
 
-    instance.end_time = validated_data.get(
-        'end_time',
-        instance.end_time
-    )
+        if qs.exists():
+            raise serializers.ValidationError(
+                "This overlaps with an existing availability slot."
+            )
 
-    instance.slot_duration_minutes = validated_data.get(
-        'slot_duration_minutes',
-        instance.slot_duration_minutes
-    )
+        return data
 
-    instance.is_active = validated_data.get(
-        'is_active',
-        instance.is_active
-    )
+    def create(self, validated_data):
+        validated_data['doctor'] = self.context['request'].user.doctorprofile
+        return Availability.objects.create(**validated_data)
 
-    instance.save()
-
-    return instance
+    def update(self, instance, validated_data):
+        validated_data.pop('doctor', None)  
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
