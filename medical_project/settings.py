@@ -161,6 +161,7 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL='accounts.User'
 
 DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE": True,
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
         'current_user': 'accounts.serializers.UserSerializer',

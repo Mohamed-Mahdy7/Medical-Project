@@ -13,18 +13,32 @@ from .serializers import UserCreateSerializer, UserSerializer
 # Create your views here.
 
 class UserViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
-    serializer_class = UserCreateSerializer
-    
-    def get_serializer_class(self):
-        if self.action == "create":
-            return UserCreateSerializer
+        queryset = User.objects.all()
+
+        def get_permissions(self):
+            if self.action == "create":
+                permission_classes = [AllowAny]
+            else:
+                permission_classes = [IsAuthenticated]
+            return [permission() for permission in permission_classes]
+            
+        def get_serializer_class(self):
+            if self.action == "create":
+                return UserCreateSerializer
+            
+            return UserSerializer
         
-        return UserSerializer
-    
-    def get_serializer_context(self):
-        return {'request': self.request}
+        def create(self, request, *args, **kwargs):
+            serializer = self.get_serializer(data=request.data)
+            if not serializer.is_valid():
+                print(serializer.errors)
+                
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            serializer.save()
+            return Response(serializer.data)
 
 
 class LoginView(TokenObtainPairView):
