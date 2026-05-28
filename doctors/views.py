@@ -22,103 +22,46 @@ class DoctorViewSet(viewsets.ModelViewSet):
 
 
 @action(
-        detail=True,
-        methods=['get'],
-        permission_classes=[IsAuthenticated],
-        url_path='slots'
-    )
-def slots(
-        self,
-        request,
-        pk=None
-    ):
+    detail=True,
+    methods=['get'],
+    permission_classes=[IsAuthenticated],
+    url_path='slots'
+)
+def slots(self, request, pk=None):
+    from datetime import date as date_type, datetime
+    from availability.models import Availability
+    from .utils import generate_available_slots
 
-        doctor = self.get_object()
+    date_str = request.query_params.get('date')
 
-            
-        date_str = request.query_params.get(
-            'date'
-        )
+    if not date_str:
+        return Response({
+            "status": "error",
+            "message": "date query parameter is required. Format: YYYY-MM-DD."
+        }, status=status.HTTP_400_BAD_REQUEST)
 
-          
-        if not date_str:
+    try:
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return Response({
+            "status": "error",
+            "message": "Invalid date format. Use YYYY-MM-DD."
+        }, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(
+    if date < date_type.today():
+        return Response({
+            "status": "error",
+            "message": "Cannot query slots for a past date."
+        }, status=status.HTTP_400_BAD_REQUEST)
 
-                {
-                    "status": "error",
+    slots = generate_available_slots(doctor_id=pk, date=date)
 
-                    "message":
-                    "date query parameter is required"
-                },
-
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        
-        try:
-
-            selected_date = datetime.strptime(
-                date_str,
-                '%Y-%m-%d'
-            ).date()
-
-        except ValueError:
-
-            return Response(
-
-                {
-                    "status": "error",
-
-                    "message":
-                    "Invalid date format"
-                },
-
-                status=status.HTTP_400_BAD_REQUEST
-            )
- 
-        if selected_date < timezone.now().date():
-
-            return Response(
-
-                {
-                    "status": "error",
-
-                    "message":
-                    "Past dates are not allowed"
-                },
-
-                status=status.HTTP_400_BAD_REQUEST
-            )
- 
-        slots = generate_available_slots(
-            doctor=doctor,
-            date=selected_date
-        )
- 
-        return Response(
-
-            {
-                "status": "success",
-
-                "message":
-                "Available slots retrieved successfully",
-
-                "data": {
-
-                    "doctor_id": doctor.id,
-
-                    "doctor_name":
-                    doctor.user.get_full_name(),
-
-                    "date": date_str,
-
-                    "available_slots": slots
-                }
-            },
-
-            status=status.HTTP_200_OK
-        )
-
-        
-        
+    return Response({
+        "status": "success",
+        "message": "Available slots retrieved successfully.",
+        "data": {
+            "doctor_id": pk,
+            "date": date_str,
+            "available_slots": slots
+        }
+    }, status=status.HTTP_200_OK)
