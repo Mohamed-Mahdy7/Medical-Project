@@ -1,0 +1,8 @@
+{
+    "REGISTER_USER": ["POST", "http://127.0.0.1:8000/accounts/user/"],
+    "LOGIN_USER": ["POST", "http://127.0.0.1:8000/accounts/login/"],
+    "GET_USERS": ["GET", "http://127.0.0.1:8000/accounts/user/"],
+    "USER_DETAILS": [["GET", "PUT", "DELETE"], "http://127.0.0.1:8000/accounts/user/<id>"],
+    "REFRESH_TOKEN": ["POST", "http://127.0.0.1:8000/accounts/token-refresh/"],
+    "LOGOUT": ["POST", "http://127.0.0.1:8000/accounts/logout/"]
+}
