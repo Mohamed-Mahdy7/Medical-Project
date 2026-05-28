@@ -37,10 +37,15 @@ class PatientProfileViewSet(ModelViewSet):
             }, status=status.HTTP_200_OK)
 
         serializer = self.get_serializer(profile, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
             "status": "success",
             "message": "Patient profile updated successfully.",
             "data": serializer.data
-        }, status=status.HTTP_200_OK)
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "status": "error",
+            "message": "Invalid data.",
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
