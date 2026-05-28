@@ -4,7 +4,8 @@ from availability.models import Availability
 
 
 def generate_available_slots(doctor_id, date):
-    day_of_week = date.weekday()  # 0=Monday ... 6=Sunday
+    doctor_id = int(doctor_id)
+    day_of_week = date.weekday()
 
     availabilities = Availability.objects.filter(
         doctor_id=doctor_id,
@@ -15,13 +16,17 @@ def generate_available_slots(doctor_id, date):
     if not availabilities.exists():
         return []
 
+    # start_time is a DateTimeField — filter by date component
     booked_times = set(
         Appointment.objects.filter(
             doctor_id=doctor_id,
-            date=date,
+            start_time__date=date,
             status__in=[Appointment.Status.PENDING, Appointment.Status.CONFIRMED]
         ).values_list('start_time', flat=True)
     )
+
+    # booked_times contains full datetime objects — extract just the time
+    booked_times = {dt.time().replace(second=0, microsecond=0) for dt in booked_times}
 
     available_slots = []
 
@@ -37,3 +42,5 @@ def generate_available_slots(doctor_id, date):
             current += delta
 
     return available_slots
+
+    
