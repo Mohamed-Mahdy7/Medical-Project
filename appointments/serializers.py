@@ -80,3 +80,41 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
         patient = request.user.patient_profile
 
         return Appointment.objects.create(patient=patient, **validated_data)
+
+
+class AppointmentPatientUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ["status"]
+
+    def validate_status(self, value):
+        if value != Appointment.Status.CANCELLED:
+            raise serializers.ValidationError("Patient can only cancel appointments")
+        return value
+
+    def validate(self, attrs):
+        if self.instance.status != Appointment.Status.PENDING:
+            raise serializers.ValidationError(
+                f"Cannot cancel an appointment with status '{self.instance.status}'."
+            )
+        return attrs
+
+
+class AppointmentDoctorUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ["status", "notes"]
+
+    def validate_status(self, value):
+        if value == Appointment.Status.PENDING:
+            raise serializers.ValidationError(
+                "Doctors cannot set appointment status back to pending."
+            )
+        return value
+
+    def validate(self, attrs):
+        if self.instance.status in [Appointment.Status.COMPLETED, Appointment.Status.CANCELLED]:
+            raise serializers.ValidationError(
+                f"Cannot modify an appointment with status '{self.instance.status}'."
+            )
+        return attrs
