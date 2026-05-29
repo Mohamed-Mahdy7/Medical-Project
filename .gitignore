@@ -4,4 +4,4 @@ __pycache__
 Dockerfile
 docker-compose.yml
 structure.txt
-*/migrations/
+Backend/*/migrations/
