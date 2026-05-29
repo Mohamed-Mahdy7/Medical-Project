@@ -29,7 +29,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
 )
 def slots(self, request, pk=None):
     from datetime import date as date_type, datetime
-    from availability.models import Availability
+    from Backend.availability.models import Availability
     from .utils import generate_available_slots
 
     date_str = request.query_params.get('date')
