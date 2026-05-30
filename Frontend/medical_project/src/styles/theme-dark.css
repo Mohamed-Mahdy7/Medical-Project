@@ -1,0 +1,44 @@
+/* ─ Dark theme File: src/styles/theme-dark.css ─ */ 
+[data-theme="dark"] { 
+    /* Page backgrounds */ 
+    --bg-page: #111820; 
+
+    /* deepest layer — outer canvas */ 
+    --bg-surface: #182028; 
+
+    /* cards, panels, modals */ 
+    --bg-surface-2: #1E2C3A; 
+
+    /* nested surfaces, table rows, inputs */ 
+    --bg-overlay: rgba(0,0,0,.65); 
+
+    /* Borders */ 
+    --border-subtle: #243040; 
+    --border-strong: #365060; 
+
+    /* Text */ 
+    --text-primary: #E2EDF4; 
+    --text-secondary:#8AAFC0; 
+    --text-muted: #4A6878; 
+    --text-on-primary:#FFFFFF; 
+
+    /* Sidebar */ 
+    --sidebar-bg: #0E1620; 
+    --sidebar-border:#1E2C3A; 
+    --sidebar-item-hover: #182028; 
+    --sidebar-item-active-bg: #0C2D3D; 
+    --sidebar-item-active-text: #BAE0EF; 
+
+    /* Navbar / topbar */ 
+    --navbar-bg: #0E1620; 
+    --navbar-border: #1E2C3A;
+    
+    /* Table */ 
+    --table-header-bg: #1E2C3A; 
+    --table-row-hover: #1E2C3A; 
+    --table-border: #243040; 
+
+    /* Scrollbar */ 
+    --scrollbar-track: #111820; 
+    --scrollbar-thumb: #2E4255; 
+}

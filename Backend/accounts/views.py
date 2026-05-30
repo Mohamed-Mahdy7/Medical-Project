@@ -1,30 +1,50 @@
-from xmlrpc.client import ResponseError
-
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .models import User
 from .serializers import UserCreateSerializer, UserSerializer
 
 # Create your views here.
 
 class UserViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
-    serializer_class = UserCreateSerializer
-    
-    def get_serializer_class(self):
-        if self.action == "create":
-            return UserCreateSerializer
+        queryset = User.objects.all()
+
+        def get_permissions(self):
+            if self.action == "create":
+                permission_classes = [AllowAny]
+            elif self.action == "me":
+                permission_classes = [IsAuthenticated]
+            else:
+                permission_classes = [IsAdminUser]
+            return [permission() for permission in permission_classes]
+            
+        def get_serializer_class(self):
+            if self.action == "create":
+                return UserCreateSerializer
+            
+            return UserSerializer
         
-        return UserSerializer
-    
-    def get_serializer_context(self):
-        return {'request': self.request}
+        def create(self, request, *args, **kwargs):
+            serializer = self.get_serializer(data=request.data)
+            if not serializer.is_valid():
+                print(serializer.errors)
+                
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            serializer.save()
+            return Response(serializer.data)
+        
+        @action(detail=False, methods=["GET"])
+        def me(self, request):
+            serializer = UserSerializer(request.user)
+            return Response(serializer.data)
 
 
 class LoginView(TokenObtainPairView):

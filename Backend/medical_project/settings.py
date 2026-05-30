@@ -19,7 +19,6 @@ SECRET_KEY = 'django-insecure-7(7)j40svt+j4etr_wkfda4rsz53x%u8yygel=!-by6k#@y8vu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'medical_project.urls'
@@ -161,11 +160,37 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL='accounts.User'
 
 DJOSER = {
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
         'current_user': 'accounts.serializers.UserSerializer',
-    }
+    },
+    'EMAIL': {
+        "password_reset": "accounts.email.PasswordResetEmail",
+        "password_changed_confirmation":
+            "accounts.email.PasswordChangedConfirmationEmail",
+    },
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
 CORS_ALLOW_CREDENTIALS = True
+ALLOWED_HOSTS = ["*"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -1,0 +1,52 @@
+/* ─ Light theme File: src/styles/theme-light.css ─ */ 
+[data-theme="light"], :root {
+    /* Page backgrounds */ 
+    --bg-page: #F0F5F8; 
+
+    /* outer page canvas — cool off-white */ 
+    --bg-surface: #FFFFFF; 
+
+    /* cards, panels, modals */ 
+    --bg-surface-2: #F8FAFB; 
+
+    /* nested surfaces, table rows, inputs */ 
+    --bg-overlay: rgba(28,43,58,.45); 
+
+    /* modal backdrop */ /* Borders */ 
+    --border-subtle: #D1DCE4; 
+
+    /* default card / input border */ 
+    --border-strong: #9DB4C4; 
+
+    /* focused input, dividers */ /* Text */ 
+    --text-primary: #1C2B3A; 
+
+    /* headings, labels */ 
+    --text-secondary:#4A6070; 
+
+    /* body copy, descriptions */ 
+    --text-muted: #8FA6B5; 
+    
+    /* placeholders, hints, timestamps */ 
+    --text-on-primary:#FFFFFF; 
+
+    /* text on --color-primary-600 bg */ /* Sidebar */ 
+    --sidebar-bg: #FFFFFF; 
+    --sidebar-border:#D1DCE4; 
+    --sidebar-item-hover: #F0F5F8; 
+    --sidebar-item-active-bg: #E8F4F8; 
+    --sidebar-item-active-text: #0C4A6E; 
+
+    /* Navbar / topbar */ 
+    --navbar-bg: #FFFFFF; 
+    --navbar-border: #D1DCE4; 
+
+    /* Table */ 
+    --table-header-bg: #F0F5F8; 
+    --table-row-hover: #F8FAFB; 
+    --table-border: #E2EAF0; 
+
+    /* Scrollbar */ 
+    --scrollbar-track: #F0F5F8; 
+    --scrollbar-thumb: #B8CDD9; 
+}
