@@ -1,5 +1,9 @@
 import { createContext, useEffect, useState} from "react";
-import { loginRequest, logoutRequest, meRequest } from "../services/authService.js"
+import { 
+    registerRequest,
+    loginRequest, 
+    logoutRequest, 
+    meRequest } from "../services/authService.js"
 
 import api from "../api.js";
 
@@ -25,17 +29,45 @@ export function AuthProvider({ children }) {
         }
     }
 
+
+    async function register(
+        username, email, first_name,  last_name, 
+        password, confirm_password, role
+    ){
+        console.log("role received:", role);
+        console.log({
+        username,
+        email,
+        first_name,
+        last_name,
+        password,
+        role
+        });
+        try{
+            await registerRequest({
+                username, email, first_name,  last_name, 
+                password, confirm_password, role
+            });
+            await login();
+            return true;
+        } catch (error) {
+            console.error(error.response?.data);
+            return false;
+        }
+    }
+
     async function login(username, password) {
         try{
-
             await loginRequest({
                     username,
                     password,
                 });
+
             await checkAuth();
             return true;
 
         } catch (error) {
+            console.error(error);
             return false;
         }
     }
@@ -53,6 +85,7 @@ export function AuthProvider({ children }) {
             value={{
                 user,
                 loading,
+                register,
                 login,
                 logout,
                 isAuthenticated: !!user,
