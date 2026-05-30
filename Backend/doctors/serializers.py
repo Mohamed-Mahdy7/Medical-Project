@@ -31,17 +31,17 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
             'available_slots'
         ]
 
-        def get_available_slots(self, obj):
-            request = self.context.get('request')
-            date_str = request.query_params.get('date') if request else None
-    
-            if date_str:
-                from datetime import datetime
-                try:
-                    query_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-                except ValueError:
-                    return []
-            else:
-                query_date = date.today()
-    
-            return generate_available_slots(doctor_id=obj.pk, date=query_date)
+    def get_available_slots(self, obj):
+        request = self.context.get('request')
+        date_str = request.query_params.get('date') if request else None
+
+        if date_str:
+            from datetime import datetime
+            try:
+                query_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            except ValueError:
+                return []
+        else:
+            query_date = date.today()
+
+        return generate_available_slots(doctor_id=obj.pk, date=query_date)
