@@ -1,5 +1,8 @@
 import api from "../api";
 
+export const registerRequest = (data) =>
+    api.post("/accounts/user/", data);
+
 export const loginRequest = (data) =>
     api.post("/accounts/login/", data);
 
