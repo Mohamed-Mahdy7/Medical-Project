@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-from Backend.appointments.models import Appointment
-from Backend.availability.models import Availability
+from appointments.models import Appointment
+from availability.models import Availability
 
 
 def generate_available_slots(doctor_id, date):

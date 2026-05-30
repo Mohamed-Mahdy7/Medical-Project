@@ -4,10 +4,10 @@ from django.test import TestCase
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from Backend.accounts.models import User
-from Backend.doctors.models import DoctorProfile, Specialty
-from Backend.patients.models import PatientProfile
-from Backend.appointments.models import Appointment
+from accounts.models import User
+from doctors.models import DoctorProfile, Specialty
+from patients.models import PatientProfile
+from appointments.models import Appointment
 
 class AppointmentModelTest(TestCase):
     def setUp(self):

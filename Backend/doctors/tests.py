@@ -2,11 +2,11 @@ from datetime import date, time, datetime, timedelta
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase
-from Backend.doctors.models import DoctorProfile, Specialty
-from Backend.availability.models import Availability
-from Backend.appointments.models import Appointment
-from Backend.patients.models import PatientProfile
-from Backend.doctors.utils import generate_available_slots
+from doctors.models import DoctorProfile, Specialty
+from availability.models import Availability
+from appointments.models import Appointment
+from patients.models import PatientProfile
+from doctors.utils import generate_available_slots
 
 User = get_user_model()
 
