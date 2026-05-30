@@ -1,9 +1,8 @@
-from xmlrpc.client import ResponseError
-
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
@@ -18,6 +17,8 @@ class UserViewSet(ModelViewSet):
         def get_permissions(self):
             if self.action == "create":
                 permission_classes = [AllowAny]
+            elif self.action == "me":
+                permission_classes = [IsAuthenticated]
             else:
                 permission_classes = [IsAdminUser]
             return [permission() for permission in permission_classes]
@@ -38,6 +39,11 @@ class UserViewSet(ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
             serializer.save()
+            return Response(serializer.data)
+        
+        @action(detail=False, methods=["GET"])
+        def me(self, request):
+            serializer = UserSerializer(request.user)
             return Response(serializer.data)
 
 
