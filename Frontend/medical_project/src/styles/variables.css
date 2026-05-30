@@ -1,0 +1,209 @@
+
+:root {
+--color-primary-50:  #E8F4F8;
+--color-primary-100: #BAE0EF;
+--color-primary-400: #3FA8CC;
+--color-primary-600: #1A7FA3;
+--color-primary-900: #0C4A6E;
+
+--color-accent-50:   #E6F5F0;
+--color-accent-400:  #1D9E75;
+--color-accent-600:  #0F6E56;
+--color-accent-900:  #064E3B;
+
+--color-surface:     #F8FAFB;
+--color-surface-2:   #EEF3F6;
+--color-border:      #D1DCE4;
+--color-border-strong: #9DB4C4;
+--color-ink:         #1C2B3A;
+--color-ink-muted:   #4A6070;
+--color-ink-faint:   #8FA6B5;
+
+--color-pending-bg:      #FEF3C7;
+--color-pending-border:  #FDE68A;
+--color-pending-text:    #92400E;
+
+--color-confirmed-bg:     #DBEAFE;
+--color-confirmed-border: #BFDBFE;
+--color-confirmed-text:   #1E40AF;
+
+--color-completed-bg:     #D1FAE5;
+--color-completed-border: #A7F3D0;
+--color-completed-text:   #065F46;
+
+--color-cancelled-bg:     #FEE2E2;
+--color-cancelled-border: #FECACA;
+--color-cancelled-text:   #991B1B;
+
+--color-role-admin-bg:    #F3F0FF;
+--color-role-admin-text:  #4C3DB0;
+--color-role-doctor-bg:   #E8F4F8;
+--color-role-doctor-text: #0C4A6E;
+--color-role-patient-bg:  #E6F5F0;
+--color-role-patient-text:#064E3B;
+
+--font-sans:   'Inter', 'Segoe UI', system-ui, sans-serif;
+--font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+
+--radius-sm:   6px;
+--radius-md:   10px;
+--radius-lg:   14px;
+--radius-xl:   20px;
+--radius-full: 9999px;
+
+--shadow-sm:  0 1px 3px rgba(28,43,58,.08);
+--shadow-md:  0 4px 12px rgba(28,43,58,.10);
+--shadow-lg:  0 8px 24px rgba(28,43,58,.12);
+}
+
+@media (prefers-color-scheme: dark) {
+:root {
+    --color-primary-50:  #0C2D3D;
+    --color-primary-100: #123D52;
+    --color-primary-400: #3FA8CC;
+    --color-primary-600: #5CBCDB;
+    --color-primary-900: #BAE0EF;
+
+    --color-accent-50:   #062B1E;
+    --color-accent-400:  #1D9E75;
+    --color-accent-600:  #2EC28F;
+    --color-accent-900:  #9FE1CB;
+
+    --color-surface:     #111820;
+    --color-surface-2:   #182028;
+    --color-border:      #243040;
+    --color-border-strong: #365060;
+    --color-ink:         #E2EDF4;
+    --color-ink-muted:   #8AAFC0;
+    --color-ink-faint:   #4A6878;
+
+    --color-pending-bg:      #2D1F00;
+    --color-pending-border:  #7A4500;
+    --color-pending-text:    #FDE68A;
+
+    --color-confirmed-bg:     #0D1F40;
+    --color-confirmed-border: #1E3A7A;
+    --color-confirmed-text:   #BFDBFE;
+
+    --color-completed-bg:     #022C1A;
+    --color-completed-border: #065F46;
+    --color-completed-text:   #A7F3D0;
+
+    --color-cancelled-bg:     #2D0808;
+    --color-cancelled-border: #7F1D1D;
+    --color-cancelled-text:   #FECACA;
+
+    --color-role-admin-bg:    #1A1540;
+    --color-role-admin-text:  #C4BFFF;
+    --color-role-doctor-bg:   #0C2D3D;
+    --color-role-doctor-text: #BAE0EF;
+    --color-role-patient-bg:  #062B1E;
+    --color-role-patient-text:#9FE1CB;
+
+    --shadow-sm:  0 1px 3px rgba(0,0,0,.3);
+    --shadow-md:  0 4px 12px rgba(0,0,0,.4);
+    --shadow-lg:  0 8px 24px rgba(0,0,0,.8);
+}
+}
+
+/* ── Appointment status badges ──*/
+.badge-pending { 
+    background: var(--color-pending-bg); 
+    color: var(--color-pending-text); 
+    border: 0.5px solid var(--color-pending-border); 
+} 
+.badge-confirmed { 
+    background: var(--color-confirmed-bg); 
+    color: var(--color-confirmed-text); 
+    border: 0.5px solid var(--color-confirmed-border); 
+} 
+.badge-completed { 
+    background: var(--color-completed-bg); 
+    color: var(--color-completed-text); 
+    border: 0.5px solid var(--color-completed-border); 
+} 
+.badge-cancelled { 
+    background: var(--color-cancelled-bg); 
+    color: var(--color-cancelled-text); 
+    border: 0.5px solid var(--color-cancelled-border); 
+} 
+
+/* ── Role badges ── */ 
+.badge-admin { 
+    background: var(--color-role-admin-bg); 
+    color: var(--color-role-admin-text); 
+} 
+.badge-doctor { 
+    background: var(--color-role-doctor-bg); 
+    color: var(--color-role-doctor-text); 
+} 
+.badge-patient { 
+    background: var(--color-role-patient-bg); 
+    color: var(--color-role-patient-text); 
+} 
+
+/* ── Shared badge base ──*/ 
+[class*="badge-"] { 
+    display: inline-flex; 
+    align-items: center; 
+    padding: 3px 10px; 
+    border-radius: var(--radius-full); 
+    font-size: 12px; 
+    font-weight: 500; 
+    white-space: nowrap; 
+} 
+
+/* ── Appointment card accent border ── */ 
+.card-pending { 
+    border-left: 3px solid var(--color-pending-text);
+} 
+.card-confirmed { 
+    border-left: 3px solid var(--color-confirmed-text); 
+} 
+.card-completed { 
+    border-left: 3px solid var(--color-completed-text);
+} 
+.card-cancelled { 
+    border-left: 3px solid var(--color-cancelled-text); 
+} 
+
+/* ── Primary button ── */ 
+.btn-primary { 
+    background: var(--color-primary-600); 
+    color: #fff; 
+    border: none; 
+    border-radius: var(--radius-md); 
+    padding: 9px 18px; 
+    font-size: 14px; 
+    font-weight: 500; 
+    cursor: pointer;
+} 
+.btn-primary:hover { 
+    background: var(--color-primary-900); 
+} 
+.btn-ghost { 
+    background: var(--color-primary-50); 
+    color: var(--color-primary-600); 
+    border: 0.5px solid var(--color-primary-100); 
+    border-radius: var(--radius-md); 
+    padding: 9px 18px; 
+    font-size: 14px; 
+    font-weight: 500; 
+    cursor: pointer; 
+} 
+
+/* ── Text input ──*/ 
+.input { 
+    border: 1.5px solid var(--color-border); 
+    border-radius: var(--radius-md); 
+    padding: 8px 12px; 
+    font-size: 14px; 
+    background: var(--color-surface); 
+    color: var(--color-ink); 
+    outline: none; 
+    transition: border-color .15s; 
+} 
+.input:focus { 
+    border-color: var(--color-primary-400); 
+    box-shadow: 0 0 0 3px var(--color-primary-50); 
+}
