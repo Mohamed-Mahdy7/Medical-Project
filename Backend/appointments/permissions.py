@@ -47,7 +47,7 @@ class CanModifyAppointment(BasePermission):
             return True
 
         if user.role == "P":
-            return obj.patient.user == user and obj.status == "PENEDING"
+            return obj.patient.user == user and obj.status == "PENDING"
 
         if user.role == "D":
             return obj.doctor.user == user
