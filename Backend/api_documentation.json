@@ -6,9 +6,6 @@
     "USER_PROFILE": [["GET"], "http://127.0.0.1:8000/accounts/user/me/"],
     "REFRESH_TOKEN": ["POST", "http://127.0.0.1:8000/accounts/token-refresh/"],
     "LOGOUT": ["POST", "http://127.0.0.1:8000/accounts/logout/"],
-    
-    
-    
 
     
     "LIST_AVAILABILITY": ["GET", "http://127.0.0.1:8000/availability/availability/"],
