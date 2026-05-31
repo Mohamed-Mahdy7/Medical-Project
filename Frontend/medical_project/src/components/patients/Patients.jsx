@@ -20,6 +20,9 @@ function PatientProfile() {
     useEffect(() => {
         // TEMP: remove when auth is fixed
         setProfile({
+            first_name: "Yamen",
+            last_name: "Aly",
+            email: "yamen@test.com",
             date_of_birth: "1999-05-15",
             gender: "M",
             phone: "01012345678",
@@ -82,8 +85,8 @@ function PatientProfile() {
     return (
         <div className="card" style={{ maxWidth: 600, margin: "2rem auto" }}>
             <div className="page-header">
-                <h2>My Profile</h2>
-                <p>Manage your personal information</p>
+                <h2>{profile.first_name} {profile.last_name}</h2>
+                <p>{profile.email}</p>
             </div>
 
             {error && (
