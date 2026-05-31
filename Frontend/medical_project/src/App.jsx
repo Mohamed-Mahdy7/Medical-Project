@@ -7,6 +7,7 @@ import DoctorProfile from './pages/Doctor/Doctorprofile'
 import DoctorsList from './pages/Doctor/Doctorlist'
 import { Routes, Route } from "react-router-dom";
 
+import PatientProfile from './components/patients/Patients'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -14,22 +15,9 @@ function App() {
     <>
       <main className="main-content">
         <div className="page">
-          { <Login />  }
-       
-         <Routes>
-      <Route path="/" element={<DoctorDashboard />} />
-
-      <Route
-        path="/doctor/profile/:id"
-        element={<DoctorProfile />}
-      />
-
-      <Route
-        path="/doctors"
-        element={<DoctorsList />}
-      />
-    </Routes>
+          {/* <Login /> */}
           {/* <Register /> */}
+          <PatientProfile />
         </div>
       </main>
     </>
