@@ -14,6 +14,13 @@
     "UPDATE_AVAILABILITY": ["PUT", "http://127.0.0.1:8000/availability/<id>/"],
     "PARTIAL_UPDATE_AVAILABILITY": ["PATCH", "http://127.0.0.1:8000/availability/<id>/"],
     "DELETE_AVAILABILITY": ["DELETE", "http://127.0.0.1:8000/availability/<id>/"],
+    
+    "LIST_SPECIALTIES": ["GET", "http://127.0.0.1:8000/doctors/specialties/"],
+    "GET_SPECIALTY": ["GET", "http://127.0.0.1:8000/doctors/specialties/<id>/"],
+    "LIST_DOCTORS": ["GET", "http://127.0.0.1:8000/doctors/"],
+    "GET_DOCTOR": ["GET", "http://127.0.0.1:8000/doctors/<id>/"],
+    "GET_DOCTOR_SLOTS": ["GET", "http://127.0.0.1:8000/doctors/<id>/slots/"]
+   
 
     "GET_PATIENT_PROFILE": ["GET", "http://127.0.0.1:8000/patients/me/"],
     "UPDATE_PATIENT_PROFILE": [["PUT", "PATCH"], "http://127.0.0.1:8000/patients/me/"]
