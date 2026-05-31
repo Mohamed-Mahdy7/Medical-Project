@@ -1,6 +1,6 @@
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from datetime import datetime, date as date_type
 
@@ -21,9 +21,10 @@ class DoctorViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['get'],
-        permission_classes=[IsAuthenticated],
+        permission_classes=[IsAuthenticated,IsAdminUser],
         url_path='slots'
     )
+
     def slots(self, request, pk=None):
         date_str = request.query_params.get('date')
 
@@ -58,3 +59,8 @@ class DoctorViewSet(viewsets.ModelViewSet):
                 "available_slots": slots
             }
         }, status=status.HTTP_200_OK)
+    @action(
+        detail=False,methods=['get', 'put'])
+    def me(self, request):
+        serializer=DoctorProfileSerializer(request.user.doctor_profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
