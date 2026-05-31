@@ -5,9 +5,10 @@ import Register from './pages/Register'
 import PatientProfilePage from './pages/PatientProfile'
 import PatientAppointmentPage from './components/patients/PatientAppointments'
 import PatientBookingPage from './pages/PatientBooking'
-import DoctorDashboard from './pages/Doctor/Doctordashboard'
-import DoctorProfile from './pages/Doctor/Doctorprofile'
-import DoctorsList from './pages/Doctor/Doctorlist'
+import AvailabilityPage from './components/availability/AvailabilityPage'
+// import DoctorDashboard from './pages/Doctor/Doctordashboard'
+// import DoctorProfile from './pages/Doctor/Doctorprofile'
+// import DoctorsList from './pages/Doctor/Doctorlist'
 import { Routes, Route } from "react-router-dom";
 
 import PatientProfile from './components/patients/Patients'
@@ -18,11 +19,16 @@ function App() {
     <>
       <main className="main-content">
         <div className="page">
-          {/* <Login /> */}
-          {/* <Register /> */}
-          <PatientProfilePage />
-          <PatientAppointmentPage />
-          <PatientBookingPage />
+          <Routes>
+            <Route path="login" element ={<Login />} />
+            <Route path="register" element ={<Register />} />
+            <Route path="patient/profile" element ={<PatientProfilePage />} />
+            <Route path="patient/appointment" element ={<PatientAppointmentPage />} />
+            <Route path="doctor/list" element ={<PatientBookingPage />} />
+            <Route path="availability" element ={<AvailabilityPage />} />
+            {/* <Route path="doctors/dashboard" element ={<DoctorDashboard />} />
+            <Route path="doctor/profile" element ={<DoctorProfile />} /> */}
+          </Routes>
         </div>
       </main>
     </>
