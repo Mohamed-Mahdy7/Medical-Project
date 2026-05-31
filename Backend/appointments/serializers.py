@@ -118,3 +118,64 @@ class AppointmentDoctorUpdateSerializer(serializers.ModelSerializer):
                 f"Cannot modify an appointment with status '{self.instance.status}'."
             )
         return attrs
+
+class AppointmentRescheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ["start_time"]
+
+    def validate(self, attrs):
+        new_start_time = attrs.get("start_time")
+        instance = self.instance
+        request = self.context.get("request")
+
+        if new_start_time < timezone.now():
+            raise serializers.ValidationError("Cannot reschedule to a past time.")
+
+        if instance.status not in [
+            Appointment.Status.PENDING,
+            Appointment.Status.CONFIRMED
+        ]:
+            raise serializers.ValidationError(
+                f"Cannot reschedule an appointment with status '{instance.status}'."
+            )
+
+        # Find the availability window covering the new start_time
+        availability = Availability.objects.filter(
+            doctor=instance.doctor,
+            day_of_week=new_start_time.weekday(),
+            start_time__lte=new_start_time.time(),
+            end_time__gt=new_start_time.time(),
+            is_active=True
+        ).first()
+
+        if not availability:
+            raise serializers.ValidationError(
+                "The requested time is outside the doctor's availability."
+            )
+
+        # Check slot is free — exclude current appointment
+        conflict = Appointment.objects.filter(
+            doctor=instance.doctor,
+            start_time=new_start_time,
+        ).exclude(
+            status=Appointment.Status.CANCELLED
+        ).exclude(
+            pk=instance.pk
+        ).exists()
+
+        if conflict:
+            raise serializers.ValidationError("This slot is already booked.")
+
+        # Store computed end_time for use in update()
+        attrs['end_time'] = new_start_time + timedelta(
+            minutes=availability.slot_duration_minutes
+        )
+
+        return attrs
+
+    def update(self, instance, validated_data):
+        instance.start_time = validated_data['start_time']
+        instance.end_time = validated_data['end_time']
+        instance.save()
+        return instance
