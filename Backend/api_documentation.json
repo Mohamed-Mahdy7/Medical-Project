@@ -8,9 +8,16 @@
     "LOGOUT": ["POST", "http://127.0.0.1:8000/accounts/logout/"],
     
     
+    
+
+    
     "LIST_AVAILABILITY": ["GET", "http://127.0.0.1:8000/availability/availability/"],
     "CREATE_AVAILABILITY": ["POST", "http://127.0.0.1:8000/availability/availability/"],
     "GET_AVAILABILITY": ["GET", "http://127.0.0.1:8000/availability/availability/<id>/"],
     "UPDATE_AVAILABILITY": ["PUT", "http://127.0.0.1:8000/availability/availability/<id>/"],
-    "DELETE_AVAILABILITY": ["DELETE", "http://127.0.0.1:8000/availability/availability/<id>/"]
+    "DELETE_AVAILABILITY": ["DELETE", "http://127.0.0.1:8000/availability/availability/<id>/"],
+
+
+    "GET_PATIENT_PROFILE": ["GET", "http://127.0.0.1:8000/patients/me/"],
+    "UPDATE_PATIENT_PROFILE": [["PUT", "PATCH"], "http://127.0.0.1:8000/patients/me/"]
 }

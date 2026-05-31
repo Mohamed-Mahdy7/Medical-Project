@@ -4,11 +4,17 @@ from datetime import date
 
 
 class PatientProfileSerializer(serializers.ModelSerializer):
-
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+    last_name = serializers.CharField(source='user.last_name', read_only=True)
+    email = serializers.CharField(source='user.email', read_only=True)
+    
     class Meta:
         model = PatientProfile
         fields = [
             'id',
+            'first_name',
+            'last_name',
+            'email',
             'date_of_birth',
             'gender',
             'phone',
