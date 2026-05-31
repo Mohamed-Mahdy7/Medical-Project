@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getPatientProfile, updatePatientProfile } from "../../services/patientService";
+import InputField from "../accounts/InputFields";
 
 function PatientProfile() {
     const [profile, setProfile] = useState(null);
@@ -16,7 +17,6 @@ function PatientProfile() {
         medical_history_notes: "",
     });
 
-    // With this:
     useEffect(() => {
         // TEMP: remove when auth is fixed
         setProfile({
@@ -39,29 +39,6 @@ function PatientProfile() {
         setLoading(false);
     }, []);
 
-    // useEffect(() => {
-    //     fetchProfile();
-    // }, []);
-
-    async function fetchProfile() {
-        try {
-            const response = await getPatientProfile();
-            const data = response.data.data;
-            setProfile(data);
-            setForm({
-                date_of_birth: data.date_of_birth || "",
-                gender: data.gender || "",
-                phone: data.phone || "",
-                address: data.address || "",
-                medical_history_notes: data.medical_history_notes || "",
-            });
-        } catch {
-            setError("Failed to load profile.");
-        } finally {
-            setLoading(false);
-        }
-    }
-
     function handleChange(e) {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
@@ -80,80 +57,70 @@ function PatientProfile() {
         }
     }
 
-    if (loading) return <p className="text-center mt-4">Loading profile...</p>;
+    const genderLabel = { M: "Male", F: "Female" };
+
+    if (loading) return <p>Loading profile...</p>;
 
     return (
-        <div className="card" style={{ maxWidth: 600, margin: "2rem auto" }}>
+        <div className="card" style={{ maxWidth: 600 }}>
             <div className="page-header">
                 <h2>{profile.first_name} {profile.last_name}</h2>
                 <p>{profile.email}</p>
             </div>
 
             {error && (
-                <div className="alert alert-danger">{error}</div>
+                <p style={{ color: "var(--color-cancelled-text)", marginBottom: "1rem" }}>
+                    {error}
+                </p>
             )}
             {success && (
-                <div className="alert alert-success">Profile updated successfully.</div>
+                <p style={{ color: "var(--color-completed-text)", marginBottom: "1rem" }}>
+                    Profile updated successfully.
+                </p>
             )}
 
             {!editing ? (
-                // ── View mode ──
                 <div>
-                    <div className="my-2">
+                    <div className="form-group">
                         <label>Date of Birth</label>
                         <p>{profile.date_of_birth || "—"}</p>
                     </div>
-                    <div className="my-2">
+                    <div className="form-group">
                         <label>Gender</label>
-                        <p>
-                            {profile.gender === "M"
-                                ? "Male"
-                                : profile.gender === "F"
-                                ? "Female"
-                                : profile.gender === "O"
-                                ? "Other"
-                                : "—"}
-                        </p>
+                        <p>{genderLabel[profile.gender] || "—"}</p>
                     </div>
-                    <div className="my-2">
+                    <div className="form-group">
                         <label>Phone</label>
                         <p>{profile.phone || "—"}</p>
                     </div>
-                    <div className="my-2">
+                    <div className="form-group">
                         <label>Address</label>
                         <p>{profile.address || "—"}</p>
                     </div>
-                    <div className="my-2">
+                    <div className="form-group">
                         <label>Medical History Notes</label>
                         <p>{profile.medical_history_notes || "—"}</p>
                     </div>
-                    <button
-                        className="btn-primary mt-3"
-                        onClick={() => setEditing(true)}
-                    >
+                    <button className="btn-primary" onClick={() => setEditing(true)}>
                         Edit Profile
                     </button>
                 </div>
             ) : (
-                // ── Edit mode ──
                 <form onSubmit={handleSubmit}>
-                    <div className="my-2">
-                        <label htmlFor="date_of_birth">Date of Birth</label>
-                        <input
-                            id="date_of_birth"
-                            name="date_of_birth"
-                            type="date"
-                            className="input w-100"
-                            value={form.date_of_birth}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="my-2">
+                    <InputField
+                        id="date_of_birth"
+                        label="Date of Birth"
+                        type="date"
+                        value={form.date_of_birth}
+                        className="input"
+                        setValue={(val) => setForm({ ...form, date_of_birth: val })}
+                    />
+                    <div className="form-group">
                         <label htmlFor="gender">Gender</label>
                         <select
                             id="gender"
                             name="gender"
-                            className="input w-100"
+                            className="select"
                             value={form.gender}
                             onChange={handleChange}
                         >
@@ -163,52 +130,42 @@ function PatientProfile() {
                             <option value="O">Other</option>
                         </select>
                     </div>
-                    <div className="my-2">
-                        <label htmlFor="phone">Phone</label>
-                        <input
-                            id="phone"
-                            name="phone"
-                            type="text"
-                            className="input w-100"
-                            value={form.phone}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="my-2">
-                        <label htmlFor="address">Address</label>
-                        <input
-                            id="address"
-                            name="address"
-                            type="text"
-                            className="input w-100"
-                            value={form.address}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="my-2 mb-4">
-                        <label htmlFor="medical_history_notes">
-                            Medical History Notes
-                        </label>
+                    <InputField
+                        id="phone"
+                        label="Phone"
+                        type="text"
+                        placeholder="Your phone number"
+                        value={form.phone}
+                        className="input"
+                        setValue={(val) => setForm({ ...form, phone: val })}
+                    />
+                    <InputField
+                        id="address"
+                        label="Address"
+                        type="text"
+                        placeholder="Your address"
+                        value={form.address}
+                        className="input"
+                        setValue={(val) => setForm({ ...form, address: val })}
+                    />
+                    <div className="form-group">
+                        <label htmlFor="medical_history_notes">Medical History Notes</label>
                         <textarea
                             id="medical_history_notes"
                             name="medical_history_notes"
-                            className="input w-100"
-                            rows={4}
+                            className="textarea"
                             value={form.medical_history_notes}
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="d-flex gap-2">
+                    <div style={{ display: "flex", gap: "0.75rem" }}>
                         <button type="submit" className="btn-primary">
                             Save Changes
                         </button>
                         <button
                             type="button"
-                            className="btn-secondary"
-                            onClick={() => {
-                                setEditing(false);
-                                setError(null);
-                            }}
+                            className="btn-ghost"
+                            onClick={() => { setEditing(false); setError(null); }}
                         >
                             Cancel
                         </button>
