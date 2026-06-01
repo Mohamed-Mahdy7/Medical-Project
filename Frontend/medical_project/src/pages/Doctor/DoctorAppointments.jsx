@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAppointments } from "../../services/appointmentService";
+
+import { getAppointments, updateAppointment } from "../../services/appointmentService";
 
 export default function DoctorAppointments() {
     const [appointments, setAppointments] = useState([]);
@@ -17,6 +18,68 @@ export default function DoctorAppointments() {
             console.error(error);
         } finally {
             setLoading(false);
+        }
+    }
+
+    function renderActions(appointment) {
+        const status = appointment.status;
+
+        if (status === "PENDING") {
+            return (
+                <div style={{ display: "flex", gap: "8px" }}>
+                    <button className="btn-primary" onClick={() => handleConfirm(appointment.id)}>Confirm</button>
+                    <button className="btn-ghost" onClick={() => handleCancel(appointment.id)}>Cancel</button>
+                </div>
+            );
+        }
+
+        if (status === "CONFIRMED") {
+            return (
+                <div style={{ display: "flex", gap: "8px" }}>
+                    <button className="btn-primary" onClick={() => handleComplete(appointment.id)}>Complete</button>
+                    <button className="btn-ghost" onClick={() => handleCancel(appointment.id)}>Cancel</button>
+                </div>
+            );
+        }
+
+        return (
+            <span style={{ color: "#8FA6B5", fontSize: "13px" }}>No actions</span>
+        );
+    }
+
+    async function handleConfirm(id) {
+        try {
+            await updateAppointment(id, {
+                status: "CONFIRMED"
+            });
+
+            loadAppointments()
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function handleCancel(id) {
+        try {
+            await updateAppointment(id, {
+                status: "CANCELLED"
+            });
+
+            loadAppointments();
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
+    async function handleComplete(id) {
+        try {
+            await updateAppointment(id, {
+                status: "COMPLETED"
+            });
+
+            loadAppointments();
+        } catch(error) {
+            console.error(error);
         }
     }
 
@@ -48,37 +111,42 @@ export default function DoctorAppointments() {
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th>Notes</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {appointments.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5">
+                                    <td colSpan="6">
                                         No appointments found
                                     </td>
                                 </tr>
                             ) : (
-                                appointments.map((a) => (
-                                    <tr key={a.id}>
-                                        <td>{a.patient_name}</td>
+                                appointments.map((appointment) => (
+                                    <tr key={appointment.id}>
+                                        <td>{appointment.patient_name}</td>
 
                                         <td>
-                                            <span className={`badge-${a.status.toLowerCase()}`}>
-                                                {a.status}
+                                            <span className={`badge-${appointment.status.toLowerCase()}`}>
+                                                {appointment.status}
                                             </span>
                                         </td>
 
                                         <td>
-                                            {new Date(a.start_time).toLocaleString()}
+                                            {new Date(appointment.start_time).toLocaleString()}
                                         </td>
 
                                         <td>
-                                            {new Date(a.end_time).toLocaleString()}
+                                            {new Date(appointment.end_time).toLocaleString()}
                                         </td>
 
                                         <td>
-                                            {a.notes || "-"}
+                                            {appointment.notes || "-"}
+                                        </td>
+
+                                        <td>
+                                            { renderActions(appointment) }
                                         </td>
                                     </tr>
                                 ))
