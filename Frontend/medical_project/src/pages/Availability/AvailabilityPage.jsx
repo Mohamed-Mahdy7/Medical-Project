@@ -1,5 +1,5 @@
-import AvailabilityForm from './AvailabilityForm';
-import AvailabilityList from './AvailabilityList';
+import AvailabilityForm from '../../components/availability/AvailabilityForm';
+import AvailabilityList from '../../components/availability/AvailabilityList';
 import { AvailabilityProvider } from '../../context/availabilityContext';
 
 export default function AvailabilityPage() {
