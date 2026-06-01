@@ -13,6 +13,7 @@ function PatientBooking() {
 
     const [date, setDate] = useState("");
     const [slots, setSlots] = useState([]);
+    const [slotDuration, setSlotDuration] = useState(null);
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [loadingSlots, setLoadingSlots] = useState(false);
 
@@ -52,6 +53,7 @@ function PatientBooking() {
         try {
             const response = await getDoctorSlots(selectedDoctor.id, date);
             setSlots(response.data.data.available_slots);
+            setSlotDuration(response.data.data.slot_duration_minutes);
         } catch {
             setError("Failed to load available slots.");
         } finally {
@@ -69,8 +71,8 @@ function PatientBooking() {
         setBooking(true);
         try {
             const [hours, minutes] = selectedSlot.split(":");
-            const startDateTime = new Date(`${date}T${hours}:${minutes}:00`);
-            const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000);
+            const startDateTime = new Date(`${date}T${hours}:${minutes}:00Z`);
+            const endDateTime = new Date(startDateTime.getTime() + slotDuration * 60 * 1000);
             await createAppointment({
                 doctor: selectedDoctor.id,
                 start_time: startDateTime.toISOString(),
@@ -90,6 +92,7 @@ function PatientBooking() {
         setSelectedSlot(null);
         setDate("");
         setSlots([]);
+        setSlotDuration(null);
         setError(null);
         setNameFilter("");
         fetchDoctors();
@@ -127,8 +130,8 @@ function PatientBooking() {
                                     color: active
                                         ? "var(--color-primary-600)"
                                         : done
-                                        ? "var(--color-completed-text)"
-                                        : "var(--color-ink-faint)",
+                                            ? "var(--color-completed-text)"
+                                            : "var(--color-ink-faint)",
                                 }}
                             >
                                 <span style={{
@@ -143,8 +146,8 @@ function PatientBooking() {
                                     background: active
                                         ? "var(--color-primary-600)"
                                         : done
-                                        ? "var(--color-completed-text)"
-                                        : "var(--color-border)",
+                                            ? "var(--color-completed-text)"
+                                            : "var(--color-border)",
                                     color: active || done ? "#fff" : "var(--color-ink-muted)",
                                 }}>
                                     {done ? "✓" : stepNum}
