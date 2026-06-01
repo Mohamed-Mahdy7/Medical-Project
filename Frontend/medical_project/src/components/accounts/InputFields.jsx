@@ -9,6 +9,7 @@ function InputField({
             <input 
                 id={id}
                 type={type}
+                style={{width: "100%"}}
                 placeholder={placeholder}
                 value={value}
                 className={className}
