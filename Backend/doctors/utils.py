@@ -14,9 +14,10 @@ def generate_available_slots(doctor_id, date):
     )
 
     if not availabilities.exists():
-        return []
+        return [], None
 
-    # start_time is a DateTimeField — filter by date component
+    slot_duration = availabilities.first().slot_duration_minutes
+
     booked_times = set(
         Appointment.objects.filter(
             doctor_id=doctor_id,
@@ -25,7 +26,6 @@ def generate_available_slots(doctor_id, date):
         ).values_list('start_time', flat=True)
     )
 
-    # booked_times contains full datetime objects — extract just the time
     booked_times = {dt.time().replace(second=0, microsecond=0) for dt in booked_times}
 
     available_slots = []
@@ -41,6 +41,6 @@ def generate_available_slots(doctor_id, date):
                 available_slots.append(current.time().strftime('%H:%M'))
             current += delta
 
-    return available_slots
+    return available_slots, slot_duration
 
     
