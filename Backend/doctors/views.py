@@ -47,7 +47,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
                 "message": "Cannot query slots for a past date."
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        slots = generate_available_slots(doctor_id=pk, date=date)
+        slots, slot_duration = generate_available_slots(doctor_id=pk, date=date)
 
         return Response({
             "status": "success",
@@ -55,9 +55,11 @@ class DoctorViewSet(viewsets.ModelViewSet):
             "data": {
                 "doctor_id": pk,
                 "date": date_str,
-                "available_slots": slots
+                "available_slots": slots,
+                "slot_duration_minutes": slot_duration
             }
         }, status=status.HTTP_200_OK)
+
     @action(
         detail=False,methods=['get', 'put'])
     def me(self, request):
