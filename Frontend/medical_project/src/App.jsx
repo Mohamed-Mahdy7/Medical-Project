@@ -2,11 +2,16 @@ import { useState } from 'react'
 import './styles/App.css'
 import Login from "./pages/Login"
 import Register from './pages/Register'
-import DoctorDashboard from './pages/Doctor/Doctordashboard'
-import DoctorProfile from './pages/Doctor/Doctorprofile'
-import DoctorsList from './pages/Doctor/Doctorlist'
+import PatientProfilePage from './pages/PatientProfile'
+import PatientAppointmentPage from './components/patients/PatientAppointments'
+import PatientBookingPage from './pages/PatientBooking'
+import AvailabilityPage from './components/availability/AvailabilityPage'
+// import DoctorDashboard from './pages/Doctor/Doctordashboard'
+// import DoctorProfile from './pages/Doctor/Doctorprofile'
+// import DoctorsList from './pages/Doctor/Doctorlist'
 import { Routes, Route } from "react-router-dom";
 
+import PatientProfile from './components/patients/Patients'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -14,22 +19,16 @@ function App() {
     <>
       <main className="main-content">
         <div className="page">
-          { <Login />  }
-       
-         <Routes>
-      <Route path="/" element={<DoctorDashboard />} />
-
-      <Route
-        path="/doctor/profile/:id"
-        element={<DoctorProfile />}
-      />
-
-      <Route
-        path="/doctors"
-        element={<DoctorsList />}
-      />
-    </Routes>
-          {/* <Register /> */}
+          <Routes>
+            <Route path="login" element ={<Login />} />
+            <Route path="register" element ={<Register />} />
+            <Route path="patient/profile" element ={<PatientProfilePage />} />
+            <Route path="patient/appointment" element ={<PatientAppointmentPage />} />
+            <Route path="doctor/list" element ={<PatientBookingPage />} />
+            <Route path="availability" element ={<AvailabilityPage />} />
+            {/* <Route path="doctors/dashboard" element ={<DoctorDashboard />} />
+            <Route path="doctor/profile" element ={<DoctorProfile />} /> */}
+          </Routes>
         </div>
       </main>
     </>

@@ -9,7 +9,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         request = self.context.get('request')
-        doctor = request.user.doctorprofile
+        doctor = request.user.doctor_profile
 
         start = data.get('start_time', getattr(self.instance, 'start_time', None))
         end = data.get('end_time', getattr(self.instance, 'end_time', None))
@@ -36,7 +36,7 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        validated_data['doctor'] = self.context['request'].user.doctorprofile
+        validated_data['doctor'] = self.context['request'].user.doctor_profile
         return Availability.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
