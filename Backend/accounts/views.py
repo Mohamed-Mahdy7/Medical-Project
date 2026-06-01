@@ -29,6 +29,12 @@ class UserViewSet(ModelViewSet):
             
             return UserSerializer
         
+        @action(detail=False, methods=["GET"])
+        def me(self, request):
+            serializer = UserSerializer(request.user)
+            print(f"\n Cookies: {request.COOKIES} \n")
+            return Response(serializer.data)
+        
         def create(self, request, *args, **kwargs):
             serializer = self.get_serializer(data=request.data)
             if not serializer.is_valid():
@@ -40,12 +46,6 @@ class UserViewSet(ModelViewSet):
                 )
             serializer.save()
             return Response(serializer.data)
-        
-        @action(detail=False, methods=["GET"])
-        def me(self, request):
-            serializer = UserSerializer(request.user)
-            return Response(serializer.data)
-
 
 class LoginView(TokenObtainPairView):
     permission_classes = [AllowAny]

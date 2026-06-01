@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import InputField from "../components/accounts/InputFields";
 import AdminButton from "../components/admin";
@@ -7,6 +8,7 @@ function Login() {
     const { login } = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -19,7 +21,8 @@ function Login() {
         if (!success) {
             alert("Invalid credentials");
         }
-    }
+        navigate("/doctor/list")
+    };
     
     return (
         <main className="card" style={{width: "60%", alignSelf: "center"}}>
