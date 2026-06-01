@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from datetime import datetime, date as date_type
-
 from .models import Specialty, DoctorProfile
 from .serializers import SpecialtySerializer, DoctorProfileSerializer
 from .utils import generate_available_slots
@@ -21,7 +20,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['get'],
-        permission_classes=[IsAuthenticated,IsAdminUser],
+        permission_classes=[IsAuthenticated],
         url_path='slots'
     )
 

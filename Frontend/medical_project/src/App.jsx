@@ -43,7 +43,7 @@ function App() {
                 <AvailabilityPage />
               </ProtectedRoute>
               } />
-            <Route path="doctor/profile" element={
+            <Route path="doctor/profile/me" element={
               <ProtectedRoute>
                 <DoctorProfile />
               </ProtectedRoute>

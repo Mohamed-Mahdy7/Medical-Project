@@ -10,8 +10,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=50, null=False)
     role = models.CharField(max_length=10, choices=Roles.choices, null=False)
-    is_approved = models.BooleanField(null=True)
-    is_blocked = models.BooleanField(null=True)
+    is_approved = models.BooleanField(blank=True)
+    is_blocked = models.BooleanField(blank=True)
     created_at = models.DateField(auto_now_add=True)
     
     def __str__(self):
