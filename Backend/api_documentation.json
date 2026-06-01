@@ -15,7 +15,7 @@
     "DELETE_AVAILABILITY": ["DELETE", "http://127.0.0.1:8000/availability/availability/<id>/"],
 
     
-   "LIST_SPECIALTIES": ["GET", "http://127.0.0.1:8000/doctors/specialties/"],
+    "LIST_SPECIALTIES": ["GET", "http://127.0.0.1:8000/doctors/specialties/"],
     "GET_SPECIALTY": ["GET", "http://127.0.0.1:8000/doctors/specialties/<id>/"],
     "LIST_DOCTORS": ["GET", "http://127.0.0.1:8000/doctors/"],
     "GET_DOCTOR": ["GET", "http://127.0.0.1:8000/doctors/<id>/"],

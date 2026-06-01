@@ -1,17 +1,12 @@
- import api from "../api.js";
+import api from "../api.js";
 
 export const getDoctors = (data) =>
     api.post("/doctors/", data);
     api.get("/doctors/");
-     
 
 export const getDoctor = (data) =>
     api.post("/doctors/me/", data);
     api.get("/doctors/me/");
-
-      
-
-      
 
 export const getDoctorSlots = (id) =>
     api.get(`/doctors/${id}/slots/`);
