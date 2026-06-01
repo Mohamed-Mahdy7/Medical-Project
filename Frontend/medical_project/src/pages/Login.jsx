@@ -1,10 +1,14 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import InputField from "../components/accounts/InputFields";
+import AdminButton from "../components/admin";
 
 function Login() {
     const { login } = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -17,46 +21,38 @@ function Login() {
         if (!success) {
             alert("Invalid credentials");
         }
-    }
-
+        navigate("/doctor/list")
+    };
+    
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="card" style={{ maxWidth: 420, margin: '4rem auto'}}>
-                <div className="page-header">
-                    <h2>Log in</h2>
-                    <p>Welcome back to the medical portal</p>
-                </div>
-                <div className="my-2">
-                    <label htmlFor="username">Username</label>
-                    <input
+        <main className="card" style={{width: "60%", alignSelf: "center"}}>
+            <form  onSubmit={handleSubmit}>
+                <div style={{ maxWidth: 420, margin: '4rem auto'}}>
+                    <InputField 
                         id="username"
+                        label="Username"
                         type="text"
                         placeholder="Your Username"
                         value={username}
-                        className="input w-100"
-                        onChange={(e) =>
-                            setUsername(e.target.value)
-                        }
+                        className="input"
+                        setValue={setUsername}
                     />
-                </div>
-                <div className="my-2 mb-4">
-                    <label htmlFor="password">Password</label>
-                    <input
+                    <InputField 
                         id="password"
+                        label="Password"
                         type="password"
                         placeholder="••••••••"
-                        className="input w-100"
+                        className="input"
                         value={password}
-                        onChange={(e) =>
-                            setPassword(e.target.value)
-                        }
+                        setValue={setPassword}
                     />
+                    <button className="btn-primary" style={{ width: "100%"}}>
+                        Login
+                    </button>
                 </div>
-                <button className="btn-primary" style={{ width: "100%"}}>
-                    Login
-                </button>
-            </div>
-        </form>
+            <AdminButton />
+            </form>
+        </main>
     );
 }
 

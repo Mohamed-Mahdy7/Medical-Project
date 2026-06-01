@@ -1,13 +1,16 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import status
+
 
 from .serializers import (
     AppointmentDetailSerializer,
     AppointmentCreateSerializer,
     AppointmentPatientUpdateSerializer,
     AppointmentDoctorUpdateSerializer,
+    AppointmentRescheduleSerializer,
 )
 from .permissions import (
     IsPatient,
@@ -25,18 +28,31 @@ class AppointmentViewSet(ModelViewSet):
         )
 
     def get_queryset(self):
+        from django.utils import timezone
         user = self.request.user
 
         if user.is_staff:
-            return self.get_base_queryset().all()
+            queryset = self.get_base_queryset().all()
+        elif user.role == "P":
+            queryset = self.get_base_queryset().filter(patient=user.patient_profile)
+        elif user.role == "D":
+            queryset = self.get_base_queryset().filter(doctor=user.doctor_profile)
+        else:
+            return Appointment.objects.none()
 
-        if user.role == "P":
-            return self.get_base_queryset().filter(patient=user.patient_profile)
+        # Filter by status
+        appointment_status = self.request.query_params.get('status')
+        if appointment_status:
+            queryset = queryset.filter(status=appointment_status)
 
-        if user.role == "D":
-            return self.get_base_queryset().filter(doctor=user.doctor_profile)
+        # Filter by type
+        appointment_type = self.request.query_params.get('type')
+        if appointment_type == 'upcoming':
+            queryset = queryset.filter(start_time__gte=timezone.now())
+        elif appointment_type == 'past':
+            queryset = queryset.filter(start_time__lt=timezone.now())
 
-        return Appointment.objects.none()
+        return queryset
 
     def get_permissions(self):
         if self.action == "create":
@@ -76,3 +92,27 @@ class AppointmentViewSet(ModelViewSet):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
+    
+    @action(detail=True, methods=['patch'], url_path='reschedule')
+    def reschedule(self, request, pk=None):
+        appointment = self.get_object()
+
+        serializer = AppointmentRescheduleSerializer(
+            appointment,
+            data=request.data,
+            context={'request': request}
+        )
+        if not serializer.is_valid():
+            return Response({
+                "status": "error",
+                "message": "Invalid data.",
+                "errors": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response({
+            "status": "success",
+            "message": "Appointment rescheduled successfully.",
+            "data": AppointmentDetailSerializer(serializer.instance).data
+        }, status=status.HTTP_200_OK)
