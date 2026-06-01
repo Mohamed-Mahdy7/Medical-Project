@@ -198,6 +198,7 @@ class PatientAppointmentRescheduleTests(APITestCase):
             start_time=self.monday.time(),
             end_time=(self.monday + timedelta(hours=4)).time(),
             slot_duration_minutes=60,
+            price=100,
             is_active=True
         )
 
