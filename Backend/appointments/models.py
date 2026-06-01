@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 from patients.models import PatientProfile
-
 from doctors.models import DoctorProfile
 
 class Appointment(models.Model):
@@ -22,6 +21,11 @@ class Appointment(models.Model):
         DoctorProfile,
         on_delete=models.CASCADE,
         related_name="doctor_appointments",
+    )
+    availability = models.ForeignKey(
+        'availability.Availability',
+        on_delete=models.CASCADE,
+        related_name="appointments",
     )
     notes = models.TextField(null=True, blank=True)
     status = models.CharField(
