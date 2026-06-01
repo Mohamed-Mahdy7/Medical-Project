@@ -1,41 +1,95 @@
 from django.db import models
+
 from django.conf import settings
 
 
 class Specialty(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
+
+    name = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    description = models.TextField(
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+
+        ordering = ['name']
 
     def __str__(self):
+
         return self.name
 
 
 class DoctorProfile(models.Model):
+
     user = models.OneToOneField(
+
         settings.AUTH_USER_MODEL,
+
         on_delete=models.CASCADE,
+
         related_name='doctor_profile'
     )
 
     specialty = models.ForeignKey(
+
         Specialty,
+
         on_delete=models.SET_NULL,
+
         null=True,
+
         related_name='doctors'
     )
 
-    bio = models.TextField(blank=True)
+    bio = models.TextField(
+        blank=True
+    )
 
-    phone = models.CharField(max_length=11)
+    phone = models.CharField(
+        max_length=11
+    )
 
     profile_picture = models.ImageField(
+
         upload_to='doctors/',
+
         blank=True,
+
         null=True
     )
 
-    years_of_experience = models.PositiveIntegerField(default=0)
+    years_of_experience = models.PositiveIntegerField(
+        default=0
+    )
+
+    is_approved = models.BooleanField(
+        default=False
+    )
+
+    is_blocked = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+
+        ordering = ['-created_at']
 
     def __str__(self):
-        return self.user.get_full_name() 
-     
+
+        return self.user.get_full_name()

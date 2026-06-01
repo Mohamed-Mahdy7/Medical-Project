@@ -7,12 +7,15 @@ import './styles/base.css'
 // import './styles/utilities.css'
 import './styles/index.css'
 import App from './App.jsx'
+import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </BrowserRouter>
   </StrictMode>,
 )
