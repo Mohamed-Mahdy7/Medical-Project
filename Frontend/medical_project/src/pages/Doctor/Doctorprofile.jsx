@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { getDoctor } from "../../services/doctorservice";  
 import {DoctorContext, DoctorProvider} from "../../context/doctorcontext";
 export default function DoctorProfile() {
+<<<<<<< HEAD
   
   const [doctor, setDoctor] = useState(DoctorContext);
+=======
+  const [doctor, setDoctor] = useState(null);
+>>>>>>> 0906caf882d3b95105c25eb13ddfa055436aa4d8
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+<<<<<<< HEAD
     
+=======
+>>>>>>> 0906caf882d3b95105c25eb13ddfa055436aa4d8
     const fetchDoctor = async () => {
       try {
         setLoading(true);
@@ -34,7 +40,7 @@ export default function DoctorProfile() {
       <h2>Doctor Profile</h2>
 
       <div style={{ marginTop: "20px" }}>
-        <h3>Dr. {doctor.id}</h3>
+        <h3>Dr. {doctor}</h3>
         <p><b>Specialty:</b> {doctor.specialty}</p>
         <p><b>Email:</b> {doctor.profile_picture}</p>
         <p><b>Phone:</b> {doctor.phone}</p>
@@ -44,4 +50,3 @@ export default function DoctorProfile() {
     </div>
   );
 }
- 

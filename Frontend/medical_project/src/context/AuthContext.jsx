@@ -1,14 +1,14 @@
-import { createContext, useEffect, useState} from "react";
-import { 
-    registerRequest,
-    loginRequest, 
-    logoutRequest, 
-    meRequest } from "../services/authService.js"
-
 import api from "../api.js";
+import { createContext, useEffect, useState } from "react";
+import {
+    registerRequest,
+    loginRequest,
+    logoutRequest,
+    meRequest
+} from "../services/authService.js"
+
 
 export const AuthContext = createContext();
-
 
 export function AuthProvider({ children }) {
 
@@ -17,12 +17,10 @@ export function AuthProvider({ children }) {
 
     async function checkAuth() {
         try {
-            if (loading) {
-                return <p>Loading...</p>;
-            }
             const response = await meRequest();
             setUser(response.data);
-        } catch {
+        } catch (error) {
+            console.log(error);
             setUser(null);
         } finally {
             setLoading(false);
@@ -31,24 +29,24 @@ export function AuthProvider({ children }) {
 
 
     async function register(
-        username, email, first_name,  last_name, 
+        username, email, first_name, last_name,
         password, confirm_password, role
-    ){
+    ) {
         console.log("role received:", role);
         console.log({
-        username,
-        email,
-        first_name,
-        last_name,
-        password,
-        role
+            username,
+            email,
+            first_name,
+            last_name,
+            password,
+            role
         });
-        try{
+        try {
             await registerRequest({
-                username, email, first_name,  last_name, 
+                username, email, first_name, last_name,
                 password, confirm_password, role
             });
-            await login();
+            await login(username, password);
             return true;
         } catch (error) {
             console.error(error.response?.data);
@@ -57,11 +55,11 @@ export function AuthProvider({ children }) {
     }
 
     async function login(username, password) {
-        try{
+        try {
             await loginRequest({
-                    username,
-                    password,
-                });
+                username,
+                password,
+            });
 
             await checkAuth();
             return true;
@@ -73,7 +71,11 @@ export function AuthProvider({ children }) {
     }
 
     async function logout() {
-        await logoutRequest();
+        try{
+            await logoutRequest();
+        } finally {
+            setUser(null);
+        }
     }
 
     useEffect(() => {
