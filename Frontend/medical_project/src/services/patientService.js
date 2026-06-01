@@ -21,10 +21,10 @@ export const createAppointment = (data) =>
     api.post("/appointments/", data);
 
 export const cancelAppointment = (id) =>
-    api.post(`/appointments/${id}/`, { status: "CANCELLED" });
+    api.patch(`/appointments/${id}/`, { status: "CANCELLED" });
 
 export const rescheduleAppointment = (id, start_time) =>
-    api.post(`/appointments/${id}/reschedule/`, { start_time });
+    api.patch(`/appointments/${id}/reschedule/`, { start_time });
 
 
 export const getDoctors = (filters = {}) => {

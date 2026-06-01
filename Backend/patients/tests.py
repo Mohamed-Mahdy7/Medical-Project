@@ -36,7 +36,7 @@ class PatientProfileRetrieveTests(APITestCase):
     def test_unauthenticated_request_is_rejected(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_doctor_cannot_access_patient_profile(self):
         doctor = User.objects.create_user(
