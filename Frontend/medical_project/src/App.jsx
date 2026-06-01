@@ -9,7 +9,7 @@ import Register from './pages/Register'
 import PatientProfilePage from './pages/PatientProfile'
 import PatientAppointmentPage from './components/patients/PatientAppointments'
 import PatientBookingPage from './pages/PatientBooking'
-import AvailabilityPage from './components/availability/AvailabilityPage'
+import AvailabilityPage from './pages/Availability/AvailabilityPage'
 import DoctorDashboard from './pages/Doctor/Doctordashboard'
 import DoctorProfile from './pages/Doctor/Doctorprofile'
 import DoctorsList from './pages/Doctor/Doctorlist'
@@ -18,6 +18,7 @@ import PatientProfile from './components/patients/Patients'
 function App() {
   return (
     <>
+      
       <main className="main-content">
         <div className="page">
           <Navbar />
@@ -55,6 +56,7 @@ function App() {
           </Routes>
         </div>
       </main>
+      
     </>
   )
 }

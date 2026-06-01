@@ -1,15 +1,19 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import DoctorProfile from "./Doctorprofile";
+import { DoctorContext } from "../../context/doctorcontext";
 import { Routes, Route } from "react-router-dom";
+import { DoctorProvider } from "../../context/doctorcontext";
 
 <Routes>
-  <Route path="profile/:id" element={<DoctorProfile />} />
+  <Route path="profile/me" element={<DoctorProfile />} />
 </Routes>
  
  
 import { useState } from "react";
+import { getSpecialties, getSpecialty } from "../../services/doctorservice";
 export default function DoctorDashboard() {
     const [showSpecialtyForm, setShowSpecialtyForm] = useState(false);
+      const [showModal, setShowModal] = useState(false);
   return (
     <div>
      <h1 style={{ textAlign: "center" }}>Doctor Dashboard</h1> 
@@ -22,20 +26,49 @@ export default function DoctorDashboard() {
       </button>
 
       {showSpecialtyForm && (
-        <form>
+        <div className="overlay">
+          <div className="modal"     style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.4)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+            
+        <form  style={{
+          border: "3px solid #0fa8df",
+          background: "white",
+          padding: "30px",
+          borderRadius: "12px",
+          minWidth: "350px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+        }}>
+           <h2>Add Specialty</h2>
           <input
             type="text"
             name="specialty"
+            value={Specialty}
             placeholder="Enter specialty"
           />
           <button type="submit">
             Save
           </button>
+          <button
+            type="button"
+            onClick={() => setShowSpecialtyForm(false)} 
+          >
+            Cancel
+          </button>
         </form>
+          </div>
+        </div>
       )}
 
       <div>
-        <Link to="/doctor/profile/1">
+        <Link to="/doctor/profile/me">
           My Profile
         </Link>
       </div>

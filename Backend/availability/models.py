@@ -19,6 +19,7 @@ class Availability(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     slot_duration_minutes = models.PositiveIntegerField()
+    price = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
 
     class Meta:
