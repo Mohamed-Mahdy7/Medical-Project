@@ -57,11 +57,9 @@ function App() {
                 <DoctorDashboard />
               </ProtectedRoute>
               } />
-
-            <Route
-                path="/doctor/appointments"
-                element={<DoctorAppointments />}
-            />
+            <Route path="doctor/appointments" element={
+              <DoctorAppointments />
+              } />
           </Routes>
         </div>
       </main>
