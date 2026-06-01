@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import InputField from "../components/accounts/InputFields";
 
@@ -11,6 +12,7 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
     const [role, setRole] = useState("");
+    const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -24,6 +26,8 @@ function Register() {
         if (!success) {
             alert("Invalid credentials");
         }
+
+        navigate("/login")
     }
 
     return (
