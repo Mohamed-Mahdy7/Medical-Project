@@ -15,12 +15,14 @@ import DoctorDashboard from './pages/Doctor/Doctordashboard'
 import DoctorProfile from './pages/Doctor/Doctorprofile'
 import DoctorsList from './pages/Doctor/Doctorlist'
 import PatientProfile from './components/patients/Patients'
+import { DoctorProvider } from './context/doctorcontext';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <DoctorProvider> 
       
       <main className="main-content">
         <div className="page">
@@ -46,12 +48,12 @@ function App() {
                 <AvailabilityPage />
               </ProtectedRoute>
               } />
-            <Route path="doctor/profile" element={
+            <Route path="doctor/profile/me" element={
               <ProtectedRoute>
                 <DoctorProfile />
               </ProtectedRoute>
               } />
-            <Route path="doctors/dashboard" element={
+            <Route path="doctor/dashboard" element={
               <ProtectedRoute>
                 <DoctorDashboard />
               </ProtectedRoute>
@@ -59,9 +61,10 @@ function App() {
           </Routes>
         </div>
       </main>
-      
+      </DoctorProvider>
     </>
   )
 }
+
 
 export default App

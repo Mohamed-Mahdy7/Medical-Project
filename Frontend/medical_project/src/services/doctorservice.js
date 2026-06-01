@@ -17,6 +17,6 @@ export const getSpecialties = () =>
 export const getSpecialty = (id) =>
     api.get(`/doctors/specialties/${id}/`);
 
-export const createSpecialty = (name) =>
-    api.post("/doctors/specialties/", { name });
+export const createSpecialty = (data) =>
+    api.post("/doctors/specialties/", data );
  

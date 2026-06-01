@@ -29,12 +29,16 @@ export function DoctorProvider({ children }) {
 
         fetchDoctor();
     }, []);
-    async function addspeciality(data) {
-        try { await createSpecialty(data); return true; } 
+    async function addspeciality(data) { try {
+        const res = await createSpecialty(data);
+        console.log(res.data);
+        return true;
+    } catch (err) {
+         console.log("Status:", err.response?.status);
+        console.log("Data:", err.response?.data);
+        console.error(err);
+        return false;
         
-        catch (err) {
-            console.error("Failed to create specialty", err);
-            return false;
         }
     }
 
