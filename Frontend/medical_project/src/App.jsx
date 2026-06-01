@@ -13,6 +13,7 @@ import PatientBookingPage from './pages/PatientBooking'
 import AvailabilityPage from './pages/Availability/AvailabilityPage'
 import DoctorDashboard from './pages/Doctor/Doctordashboard'
 import DoctorProfile from './pages/Doctor/Doctorprofile'
+import DoctorAppointments from './pages/Doctor/DoctorAppointments';
 import DoctorsList from './pages/Doctor/Doctorlist'
 import PatientProfile from './components/patients/Patients'
 
@@ -56,6 +57,11 @@ function App() {
                 <DoctorDashboard />
               </ProtectedRoute>
               } />
+
+            <Route
+                path="/doctor/appointments"
+                element={<DoctorAppointments />}
+            />
           </Routes>
         </div>
       </main>
