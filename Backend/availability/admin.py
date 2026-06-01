@@ -10,6 +10,7 @@ class AvailabilityAdmin(admin.ModelAdmin):
         "start_time",
         "end_time",
         "slot_duration_minutes",
+        "price",
         "is_active",
     ]
 
