@@ -22,6 +22,7 @@ function App() {
 
   return (
     <>
+      
       <main className="main-content">
         <div className="page">
           <Navbar />
@@ -62,6 +63,7 @@ function App() {
           </Routes>
         </div>
       </main>
+      
     </>
   )
 }

@@ -13,8 +13,7 @@ function PatientAppointments() {
     const [statusFilter, setStatusFilter] = useState("");
     const [typeFilter, setTypeFilter] = useState("");
 
-    // Reschedule state
-    const [rescheduling, setRescheduling] = useState(null); // appointment id
+    const [rescheduling, setRescheduling] = useState(null);
     const [rescheduleDate, setRescheduleDate] = useState("");
     const [rescheduleSlots, setRescheduleSlots] = useState([]);
     const [loadingSlots, setLoadingSlots] = useState(false);
@@ -29,36 +28,11 @@ function PatientAppointments() {
         setLoading(true);
         setError(null);
         try {
-            // TEMP: remove when auth is fixed
-            setAppointments([
-                {
-                    id: 1,
-                    doctor_id: 1,
-                    doctor: "Dr. Ahmed Hassan",
-                    start_time: "2026-06-10T09:00:00Z",
-                    end_time: "2026-06-10T10:00:00Z",
-                    status: "PENDING",
-                    notes: "",
-                },
-                {
-                    id: 2,
-                    doctor_id: 2,
-                    doctor: "Dr. Sara Ali",
-                    start_time: "2026-05-01T14:00:00Z",
-                    end_time: "2026-05-01T15:00:00Z",
-                    status: "COMPLETED",
-                    notes: "Follow up in 2 weeks.",
-                },
-                {
-                    id: 3,
-                    doctor_id: 1,
-                    doctor: "Dr. Ahmed Hassan",
-                    start_time: "2026-06-15T11:00:00Z",
-                    end_time: "2026-06-15T12:00:00Z",
-                    status: "CONFIRMED",
-                    notes: "",
-                },
-            ]);
+            const response = await getAppointments({
+                status: statusFilter,
+                type: typeFilter,
+            });
+            setAppointments(response.data.results);
         } catch {
             setError("Failed to load appointments.");
         } finally {
@@ -100,10 +74,8 @@ function PatientAppointments() {
         setRescheduleError(null);
         setSelectedSlot(null);
         try {
-            // TEMP: fake slots — replace with:
-            // const response = await getDoctorSlots(doctorId, rescheduleDate);
-            // setRescheduleSlots(response.data.data.available_slots);
-            setRescheduleSlots(["09:00", "10:00", "11:00", "14:00", "15:00"]);
+            const response = await getDoctorSlots(doctorId, rescheduleDate);
+            setRescheduleSlots(response.data.data.available_slots);
         } catch {
             setRescheduleError("Failed to load slots.");
         } finally {
@@ -119,10 +91,7 @@ function PatientAppointments() {
             const newStartTime = new Date(
                 `${rescheduleDate}T${hours}:${minutes}:00`
             ).toISOString();
-
-            // TEMP: replace with real call when auth is fixed:
-            // await rescheduleAppointment(appointment.id, newStartTime);
-
+            await rescheduleAppointment(appointment.id, newStartTime);
             setAppointments(appointments.map(a =>
                 a.id === appointment.id
                     ? { ...a, start_time: newStartTime }
@@ -158,7 +127,6 @@ function PatientAppointments() {
                 </p>
             )}
 
-            {/* Filters */}
             <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem" }}>
                 <div className="form-group" style={{ margin: 0 }}>
                     <label htmlFor="statusFilter">Status</label>
@@ -190,7 +158,6 @@ function PatientAppointments() {
                 </div>
             </div>
 
-            {/* Appointment cards */}
             {filtered.length === 0 ? (
                 <p>No appointments found.</p>
             ) : (
@@ -234,7 +201,6 @@ function PatientAppointments() {
                             )}
                         </div>
 
-                        {/* Reschedule panel */}
                         {rescheduling === appointment.id && (
                             <div className="card" style={{ borderTop: "none", borderRadius: "0 0 var(--radius-lg) var(--radius-lg)" }}>
                                 {rescheduleError && (
