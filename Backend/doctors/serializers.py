@@ -21,6 +21,7 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     specialty = SpecialtySerializer(read_only=True)
     available_slots = serializers.SerializerMethodField()
+    slot_duration_minutes = serializers.SerializerMethodField()
     class Meta:
         model = DoctorProfile
         fields = [
@@ -31,8 +32,13 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
             'phone',
             'profile_picture',
             'years_of_experience',
-            'available_slots'
+            'available_slots',
+            'slot_duration_minutes'
         ]
+
+    def get_slot_duration_minutes(self, obj):
+        avail = obj.availability_set.filter(is_active=True).first()
+        return avail.slot_duration_minutes if avail else 60
 
     def get_available_slots(self, obj):
         request = self.context.get('request')

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from './components/accounts/ProtectedRoute';
 import './styles/App.css'
@@ -18,8 +17,6 @@ import DoctorsList from './pages/Doctor/Doctorlist'
 import PatientProfile from './components/patients/Patients'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       
@@ -47,7 +44,7 @@ function App() {
                 <AvailabilityPage />
               </ProtectedRoute>
               } />
-            <Route path="doctor/profile" element={
+            <Route path="doctor/profile/me" element={
               <ProtectedRoute>
                 <DoctorProfile />
               </ProtectedRoute>

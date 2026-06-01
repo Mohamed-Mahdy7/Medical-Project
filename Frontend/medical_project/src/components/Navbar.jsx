@@ -1,10 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import Home from "../pages/Home";
-import About from "../pages/About";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
 import "../styles/Navbar.css"
 
 const Navbar = () => {
@@ -32,7 +28,7 @@ const Navbar = () => {
                 <div className="pages">
                     <Link to="/">Home</Link>
                     <Link to="about">About</Link>
-                    <Link to="doctor/list">Doctors</Link>
+                    <Link to="doctors/dashboard">Doctors</Link>
                 </div>
             </nav>
         </>
