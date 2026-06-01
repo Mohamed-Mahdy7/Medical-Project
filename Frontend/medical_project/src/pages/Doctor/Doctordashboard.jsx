@@ -2,13 +2,15 @@
 import DoctorProfile from "./Doctorprofile";
 import { DoctorContext } from "../../context/doctorcontext";
 import { Routes, Route } from "react-router-dom";
+import { DoctorProvider } from "../../context/doctorcontext";
 
 <Routes>
-  <Route path="profile/:id" element={<DoctorProfile />} />
+  <Route path="profile/me" element={<DoctorProfile />} />
 </Routes>
  
  
 import { useState } from "react";
+import { getSpecialties, getSpecialty } from "../../services/doctorservice";
 export default function DoctorDashboard() {
     const [showSpecialtyForm, setShowSpecialtyForm] = useState(false);
       const [showModal, setShowModal] = useState(false);
@@ -48,6 +50,7 @@ export default function DoctorDashboard() {
           <input
             type="text"
             name="specialty"
+            value={Specialty}
             placeholder="Enter specialty"
           />
           <button type="submit">

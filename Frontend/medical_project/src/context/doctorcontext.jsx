@@ -39,7 +39,7 @@ export function DoctorProvider({ children }) {
     }
 
     return (
-        <DoctorContext.Provider value={{ doctor, loading }}>
+        <DoctorContext.Provider value={{ doctor, loading, addspeciality }}>
             {children}
         </DoctorContext.Provider>
     );
