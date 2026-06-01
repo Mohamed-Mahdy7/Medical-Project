@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import './styles/App.css'
+import Home from './pages/Home'
+import About from './pages/About'
+import Navbar from './components/Navbar'
 import Login from "./pages/Login"
 import Register from './pages/Register'
 import PatientProfilePage from './pages/PatientProfile'
@@ -19,7 +22,10 @@ function App() {
     <>
       <main className="main-content">
         <div className="page">
+          <Navbar />
           <Routes>
+            <Route path="/" element ={<Home />} />
+            <Route path="about" element ={<About />} />
             <Route path="login" element ={<Login />} />
             <Route path="register" element ={<Register />} />
             <Route path="patient/profile" element ={<PatientProfilePage />} />
