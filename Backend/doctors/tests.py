@@ -37,8 +37,8 @@ class GenerateAvailableSlotsTests(APITestCase):
         )
         self.patient = PatientProfile.objects.create(user=self.patient_user)
 
-        # 2026-06-01 is a Monday
-        self.monday = date(2026, 6, 1)
+        # Future Monday
+        self.monday = timezone.now().date() + timedelta(days=(7 - timezone.now().date().weekday()))
 
     def _create_availability(self, start, end, duration=60):
         return Availability.objects.create(
@@ -47,6 +47,7 @@ class GenerateAvailableSlotsTests(APITestCase):
             start_time=start,
             end_time=end,
             slot_duration_minutes=duration,
+            price=100,
             is_active=True
         )
 
@@ -103,6 +104,7 @@ class GenerateAvailableSlotsTests(APITestCase):
             start_time=time(9, 0),
             end_time=time(11, 0),
             slot_duration_minutes=60,
+            price=100,
             is_active=False
         )
         slots = generate_available_slots(self.doctor.id, self.monday)
