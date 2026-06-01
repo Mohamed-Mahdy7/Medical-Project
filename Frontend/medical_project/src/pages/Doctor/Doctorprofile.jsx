@@ -2,20 +2,12 @@ import { useEffect, useState } from "react";
 import { getDoctor } from "../../services/doctorservice";  
 import {DoctorContext, DoctorProvider} from "../../context/doctorcontext";
 export default function DoctorProfile() {
-<<<<<<< HEAD
-  
-  const [doctor, setDoctor] = useState(DoctorContext);
-=======
   const [doctor, setDoctor] = useState(null);
->>>>>>> 0906caf882d3b95105c25eb13ddfa055436aa4d8
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-<<<<<<< HEAD
     
-=======
->>>>>>> 0906caf882d3b95105c25eb13ddfa055436aa4d8
     const fetchDoctor = async () => {
       try {
         setLoading(true);
