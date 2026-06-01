@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { getDoctor } from "../../services/doctorservice";  
-import {DoctorContext, DoctorProvider} from "../../context/doctorcontext";
+import { getDoctor } from "../../services/doctorservice";
+import { DoctorContext, DoctorProvider } from "../../context/DoctorContext";
 export default function DoctorProfile() {
   const [doctor, setDoctor] = useState(DoctorContext.doctor);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    
+
     const fetchDoctor = async () => {
       try {
         setLoading(true);

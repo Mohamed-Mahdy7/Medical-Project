@@ -8,13 +8,6 @@ export function DoctorProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem("access");
- 
-        if (!token) {
-            setLoading(false);
-            return;
-        }
-
         const fetchDoctor = async () => {
             try {
                 const res = await getDoctor();

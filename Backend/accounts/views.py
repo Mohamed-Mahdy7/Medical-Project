@@ -32,7 +32,6 @@ class UserViewSet(ModelViewSet):
         @action(detail=False, methods=["GET"])
         def me(self, request):
             serializer = UserSerializer(request.user)
-            print(f"\n Cookies: {request.COOKIES} \n")
             return Response(serializer.data)
         
         def create(self, request, *args, **kwargs):
