@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from datetime import datetime, date as date_type
-
 from .models import Specialty, DoctorProfile
 from .serializers import SpecialtySerializer, DoctorProfileSerializer
 from .utils import generate_available_slots
@@ -19,13 +18,13 @@ class DoctorViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorProfileSerializer
 
     @action(
-        detail=True,
-        methods=['get'],
-        permission_classes=[IsAuthenticated,IsAdminUser],
-        url_path='slots'
+    detail=True,
+    methods=['get'],
+    permission_classes=[IsAuthenticated],
+    url_path='slots'
     )
-
     def slots(self, request, pk=None):
+
         date_str = request.query_params.get('date')
 
         if not date_str:
@@ -35,20 +34,20 @@ class DoctorViewSet(viewsets.ModelViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            query_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
             return Response({
                 "status": "error",
                 "message": "Invalid date format. Use YYYY-MM-DD."
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if query_date < date_type.today():
+        if date < date_type.today():
             return Response({
                 "status": "error",
                 "message": "Cannot query slots for a past date."
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        slots = generate_available_slots(doctor_id=pk, date=query_date)
+        slots = generate_available_slots(doctor_id=pk, date=date)
 
         return Response({
             "status": "success",

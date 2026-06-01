@@ -4,6 +4,7 @@ from .models import (
     Specialty, DoctorProfile
 )
 from .utils import generate_available_slots
+from accounts.serializers import UserSerializer
 
 
 class SpecialtySerializer(serializers.ModelSerializer):
@@ -17,6 +18,8 @@ class SpecialtySerializer(serializers.ModelSerializer):
 
 
 class DoctorProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    specialty = SpecialtySerializer(read_only=True)
     available_slots = serializers.SerializerMethodField()
     class Meta:
         model = DoctorProfile

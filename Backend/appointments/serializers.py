@@ -67,8 +67,8 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
         slot_start = start_time.time()
         slot_end = end_time.time()
-        avail_start = availability.start_time.time()
-        avail_end = availability.end_time.time()
+        avail_start = availability.start_time
+        avail_end = availability.end_time
 
         if slot_start < avail_start or slot_end > avail_end:
             raise serializers.ValidationError(
