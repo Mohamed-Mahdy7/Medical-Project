@@ -7,12 +7,17 @@ from .models import Appointment
 from availability.models import Availability
 
 class AppointmentDetailSerializer(serializers.ModelSerializer):
+    patient_name = serializers.SerializerMethodField()
+    doctor_name = serializers.SerializerMethodField()
+
     class Meta:
         model  = Appointment
         fields = [
             "id",
             "doctor",
+            "doctor_name",
             "patient",
+            "patient_name",
             "status",
             "start_time",
             "end_time",
@@ -21,6 +26,13 @@ class AppointmentDetailSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at", "status"]
+
+    def get_patient_name(self, obj):
+        return obj.patient.user.get_full_name() or obj.patient.user.username
+
+    def get_doctor_name(self, obj):
+        return obj.doctor.user.get_full_name() or obj.doctor.user.username
+
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
