@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getDoctor } from "../../services/doctorservice";  
-
+import {DoctorContext, DoctorProvider} from "../../context/doctorcontext";
 export default function DoctorProfile() {
   
-  const [doctor, setDoctor] = useState(null);
+  const [doctor, setDoctor] = useState(DoctorContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

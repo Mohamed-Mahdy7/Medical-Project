@@ -1,5 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import DoctorProfile from "./Doctorprofile";
+import { DoctorContext } from "../../context/doctorcontext";
 import { Routes, Route } from "react-router-dom";
 
 <Routes>

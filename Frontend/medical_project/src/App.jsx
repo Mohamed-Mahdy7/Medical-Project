@@ -15,11 +15,14 @@ import DoctorsList from './pages/Doctor/Doctorlist'
 import { Routes, Route } from "react-router-dom";
 
 import PatientProfile from './components/patients/Patients'
+import { DoctorProvider } from './context/doctorcontext'
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      
       <main className="main-content">
         <div className="page">
           <Navbar />
@@ -37,6 +40,7 @@ function App() {
           </Routes>
         </div>
       </main>
+      
     </>
   )
 }
