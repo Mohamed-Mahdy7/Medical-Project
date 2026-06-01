@@ -4,7 +4,7 @@ from .models import Availability, DoctorProfile
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
-        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'is_active']
+        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'price', 'is_active']
         read_only_fields = ['id']
 
     def validate(self, data):
