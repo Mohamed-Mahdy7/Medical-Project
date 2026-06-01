@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { getDoctor } from "../../services/doctorservice";  
-
+import {DoctorContext, DoctorProvider} from "../../context/doctorcontext";
 export default function DoctorProfile() {
-  const [doctor, setDoctor] = useState(null);
+  const [doctor, setDoctor] = useState(DoctorContext.doctor);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    
     const fetchDoctor = async () => {
       try {
         setLoading(true);
@@ -31,9 +32,9 @@ export default function DoctorProfile() {
       <h2>Doctor Profile</h2>
 
       <div style={{ marginTop: "20px" }}>
-        <h3>Dr. {doctor}</h3>
+        <h3>Dr. {doctor.name}</h3>
         <p><b>Specialty:</b> {doctor.specialty}</p>
-        <p><b>Email:</b> {doctor.profile_picture}</p>
+        <p><b>Profile Picture:</b> {doctor.profile_picture}</p>
         <p><b>Phone:</b> {doctor.phone}</p>
         <p><b>Bio:</b> {doctor.bio}</p>
         <p><b>Experience:</b> {doctor.years_of_experience} years</p>

@@ -18,26 +18,27 @@ function PatientProfile() {
     });
 
     useEffect(() => {
-        // TEMP: remove when auth is fixed
-        setProfile({
-            first_name: "Yamen",
-            last_name: "Aly",
-            email: "yamen@test.com",
-            date_of_birth: "1999-05-15",
-            gender: "M",
-            phone: "01012345678",
-            address: "Cairo, Egypt",
-            medical_history_notes: "No known allergies.",
-        });
-        setForm({
-            date_of_birth: "1999-05-15",
-            gender: "M",
-            phone: "01012345678",
-            address: "Cairo, Egypt",
-            medical_history_notes: "No known allergies.",
-        });
-        setLoading(false);
+        fetchProfile();
     }, []);
+
+    async function fetchProfile() {
+        try {
+            const response = await getPatientProfile();
+            const data = response.data.data;
+            setProfile(data);
+            setForm({
+                date_of_birth: data.date_of_birth || "",
+                gender: data.gender || "",
+                phone: data.phone || "",
+                address: data.address || "",
+                medical_history_notes: data.medical_history_notes || "",
+            });
+        } catch {
+            setError("Failed to load profile.");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     function handleChange(e) {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -127,7 +128,6 @@ function PatientProfile() {
                             <option value="">Select gender</option>
                             <option value="M">Male</option>
                             <option value="F">Female</option>
-                            <option value="O">Other</option>
                         </select>
                     </div>
                     <InputField
