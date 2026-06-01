@@ -89,7 +89,7 @@ function PatientAppointments() {
         try {
             const [hours, minutes] = selectedSlot.split(":");
             const newStartTime = new Date(
-                `${rescheduleDate}T${hours}:${minutes}:00`
+                `${rescheduleDate}T${hours}:${minutes}:00Z`
             ).toISOString();
             await rescheduleAppointment(appointment.id, newStartTime);
             setAppointments(appointments.map(a =>
