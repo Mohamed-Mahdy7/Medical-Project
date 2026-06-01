@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from doctors.models import DoctorProfile
+from appointments.models import Appointment
 
 class Availability(models.Model):
     class DayOfWeek(models.IntegerChoices):
@@ -51,6 +52,20 @@ class Availability(models.Model):
                 f"{self.get_day_of_week_display()} "
                 f"({self.start_time} - {self.end_time})."
             )
+        
+    def perform_destroy(self, instance):
+        has_bookings = Appointment.objects.filter(
+            doctor=instance.doctor,
+            status__in=['PENDING', 'CONFIRMED'],
+            start_time__time__gte=instance.start_time,
+            end_time__time__lte=instance.end_time,
+        ).exists()
+
+        if has_bookings:
+            raise ValidationError(
+                "Cannot delete — this slot has active appointments."
+            )
+        instance.delete()
 
     def save(self, *args, **kwargs):
         self.full_clean()  

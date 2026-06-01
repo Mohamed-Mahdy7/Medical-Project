@@ -1,11 +1,23 @@
 from rest_framework import serializers
-from .models import Availability, DoctorProfile
-
+from .models import Availability
+from appointments.models import Appointment
 class AvailabilitySerializer(serializers.ModelSerializer):
+    is_booked = serializers.SerializerMethodField()
     class Meta:
         model = Availability
-        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'price', 'is_active']
-        read_only_fields = ['id']
+        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'price', 'is_active', 'is_booked']
+        read_only_fields = ['id', 'is_booked']
+
+    def get_is_booked(self, obj):
+        return Appointment.objects.filter(
+            doctor=obj.doctor,
+            status__in=[
+                Appointment.Status.PENDING,
+                Appointment.Status.CONFIRMED,
+            ],
+            start_time__time__gte=obj.start_time,
+            end_time__time__lte=obj.end_time,
+        ).exists()
 
     def validate(self, data):
         request = self.context.get('request')

@@ -70,7 +70,7 @@ function PatientBooking() {
         try {
             const [hours, minutes] = selectedSlot.split(":");
             const startDateTime = new Date(`${date}T${hours}:${minutes}:00`);
-            const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000);
+            const endDateTime = new Date(startDateTime.getTime() + selectedDoctor.slot_duration_minutes * 60 * 1000);
             await createAppointment({
                 doctor: selectedDoctor.id,
                 start_time: startDateTime.toISOString(),
