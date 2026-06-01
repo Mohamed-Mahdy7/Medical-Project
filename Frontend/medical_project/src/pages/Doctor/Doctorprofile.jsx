@@ -3,17 +3,17 @@ import { useParams } from "react-router-dom";
 import { getDoctor } from "../../services/doctorservice";  
 
 export default function DoctorProfile() {
-  const { id } = useParams();
+  
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const id=1 // Replace with actual doctor ID
+    
     const fetchDoctor = async () => {
       try {
         setLoading(true);
-        const res = await getDoctor(id);
+        const res = await getDoctor();
         setDoctor(res.data);
       } catch (err) {
         setError("Failed to load doctor profile");
@@ -23,7 +23,7 @@ export default function DoctorProfile() {
     };
 
     fetchDoctor();
-  }, [id]);
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

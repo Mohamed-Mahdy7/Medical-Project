@@ -6,9 +6,9 @@ import PatientProfilePage from './pages/PatientProfile'
 import PatientAppointmentPage from './components/patients/PatientAppointments'
 import PatientBookingPage from './pages/PatientBooking'
 import AvailabilityPage from './components/availability/AvailabilityPage'
-// import DoctorDashboard from './pages/Doctor/Doctordashboard'
-// import DoctorProfile from './pages/Doctor/Doctorprofile'
-// import DoctorsList from './pages/Doctor/Doctorlist'
+import DoctorDashboard from './pages/Doctor/Doctordashboard'
+import DoctorProfile from './pages/Doctor/Doctorprofile'
+import DoctorsList from './pages/Doctor/Doctorlist'
 import { Routes, Route } from "react-router-dom";
 
 import PatientProfile from './components/patients/Patients'
@@ -26,8 +26,8 @@ function App() {
             <Route path="patient/appointment" element ={<PatientAppointmentPage />} />
             <Route path="doctor/list" element ={<PatientBookingPage />} />
             <Route path="availability" element ={<AvailabilityPage />} />
-            {/* <Route path="doctors/dashboard" element ={<DoctorDashboard />} />
-            <Route path="doctor/profile" element ={<DoctorProfile />} /> */}
+            <Route path="doctors/dashboard" element ={<DoctorDashboard />} />
+            <Route path="doctor/profile/me" element ={<DoctorProfile />} />
           </Routes>
         </div>
       </main>

@@ -1,11 +1,11 @@
 import api from "../api.js";
 
-export const getDoctors = (data) =>
-    api.post("/doctors/", data);
+export const getDoctors = () =>
+     
     api.get("/doctors/");
 
-export const getDoctor = (data) =>
-    api.post("/doctors/me/", data);
+export const getDoctor = () =>
+   
     api.get("/doctors/me/");
 
 export const getDoctorSlots = (id) =>
