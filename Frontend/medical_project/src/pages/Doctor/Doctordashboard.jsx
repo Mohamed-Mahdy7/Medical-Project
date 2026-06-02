@@ -16,6 +16,7 @@ export default function DoctorDashboard() {
       const { addspeciality } = useContext(DoctorContext);
       const [showModal, setShowModal] = useState(false);
       const [specialty, setSpecialty] = useState("");
+      
 
       const handleSubmit = async (e) => {
         e.preventDefault();
