@@ -198,6 +198,19 @@ function PatientBooking() {
                                                 {doctor.bio}
                                             </p>
                                         )}
+                                        {doctor.available_days?.length > 0 && (
+                                            <div style={{ marginTop: "0.5rem", display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                                                {doctor.available_days.map(day => (
+                                                    <span
+                                                        key={day}
+                                                        className="badge-confirmed"
+                                                        style={{ fontSize: "0.75rem" }}
+                                                    >
+                                                        {day}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                     <button
                                         className="btn-primary"

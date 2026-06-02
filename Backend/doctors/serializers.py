@@ -5,6 +5,7 @@ from .models import (
 )
 from .utils import generate_available_slots
 from accounts.serializers import UserSerializer
+from availability.models import Availability
 
 
 class SpecialtySerializer(serializers.ModelSerializer):
@@ -33,7 +34,8 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
             'profile_picture',
             'years_of_experience',
             'available_slots',
-            'slot_duration_minutes'
+            'slot_duration_minutes',
+            'available_days'
         ]
 
     def get_slot_duration_minutes(self, obj):
@@ -54,3 +56,11 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
             query_date = date.today()
 
         return generate_available_slots(doctor_id=obj.pk, date=query_date)
+
+    def get_available_days(self, obj): 
+        days = Availability.objects.filter(
+            doctor=obj,
+            is_active=True
+        ).values_list('day_of_week', flat=True).distinct().order_by('day_of_week')
+        day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        return [day_names[d] for d in days]
