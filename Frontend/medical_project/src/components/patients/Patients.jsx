@@ -53,7 +53,8 @@ function PatientProfile() {
             setProfile(response.data.data);
             setEditing(false);
             setSuccess(true);
-        } catch {
+        } catch(error) {
+            console.log(error)
             setError("Failed to update profile.");
         }
     }

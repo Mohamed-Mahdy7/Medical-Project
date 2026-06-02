@@ -4,7 +4,7 @@ export const getPatientProfile = () =>
     api.get("/patients/me/");
 
 export const updatePatientProfile = (data) =>
-    api.post("/patients/me/", data);
+    api.put("/patients/me/", data);
 
 
 export const getAppointments = (filters = {}) => {
@@ -21,10 +21,10 @@ export const createAppointment = (data) =>
     api.post("/appointments/", data);
 
 export const cancelAppointment = (id) =>
-    api.patch(`/appointments/${id}/`, { status: "CANCELLED" });
+    api.post(`/appointments/${id}/`, { status: "CANCELLED" });
 
 export const rescheduleAppointment = (id, start_time) =>
-    api.patch(`/appointments/${id}/reschedule/`, { start_time });
+    api.post(`/appointments/${id}/reschedule/`, { start_time });
 
 
 export const getDoctors = (filters = {}) => {

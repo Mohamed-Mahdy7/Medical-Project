@@ -2,6 +2,8 @@
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer, \
     UserSerializer as BaseUserSerializer
 from rest_framework import serializers
+from doctors.models import DoctorProfile
+from patients.models import PatientProfile
 from .models import User
 
 
@@ -27,7 +29,10 @@ class UserCreateSerializer(BaseUserCreateSerializer):
     def create(self, validated_data):
         validated_data.pop("confirm_password")
         user = User.objects.create_user(**validated_data)
-
+        if user.role == "D":
+            DoctorProfile.objects.create(user_id=user.id)
+        elif user.role == "P":
+            PatientProfile.objects.create(user_id=user.id)
         return user
     
 class UserSerializer(BaseUserSerializer):

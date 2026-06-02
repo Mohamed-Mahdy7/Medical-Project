@@ -5,7 +5,7 @@ import InputField from "../components/accounts/InputFields";
 import AdminButton from "../components/admin";
 
 function Login() {
-    const { login } = useContext(AuthContext);
+    const { login, checkAuth } = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
