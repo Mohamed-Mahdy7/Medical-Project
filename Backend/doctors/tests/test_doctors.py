@@ -6,8 +6,8 @@ from doctors.utils import generate_available_slots
 from appointments.models import Appointment
 
 
-DOCTORS_URL   = "/doctors/doctor/"
-SPECIALTY_URL = "/doctors/specialty/"
+DOCTORS_URL   = "/doctors/"
+SPECIALTY_URL = "/doctors/specialties/"
 
 
 @pytest.mark.django_db
