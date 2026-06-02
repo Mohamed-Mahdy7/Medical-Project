@@ -194,7 +194,6 @@
 
 /* ── Text input ──*/ 
 .input { 
-    border: 1.5px solid var(--color-border); 
     border-radius: var(--radius-md); 
     padding: 8px 12px; 
     font-size: 14px; 

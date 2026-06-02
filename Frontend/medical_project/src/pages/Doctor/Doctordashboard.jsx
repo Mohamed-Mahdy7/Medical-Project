@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import { DoctorProvider } from "../../context/DoctorContext";
 import { useContext, useState } from "react";
 import { getSpecialties, getSpecialty } from "../../services/doctorservice";
+import "../../styles/DoctorDashboard.css"
 
 export default function DoctorDashboard() {
   const { addSpeciality, specialties } = useContext(DoctorContext);
@@ -25,90 +26,87 @@ export default function DoctorDashboard() {
     navigate("/doctors/specialties/")
   };
   return (
-    <div>
-      <h1 style={{ textAlign: "center" }}>Doctor Dashboard</h1>
-      <br />
-      <div style={{ display: "flex", flexDirection: "row", gap: "10rem", justifyContent: "center" }}>
+    <div className="page">
+      <div className="page-header">
+          <h1>Doctor Dashboard</h1>
+          <p>
+              Manage your profile, appointments, availability and specialties.
+          </p>
+      </div>      
+      <br className="divider"/>
+      <div style={{ marginBottom: "1rem" }}>
         <button
           className="btn-primary"
+          style={{width: "100%"}}
           onClick={() => setShowSpecialtyForm(true)}
         >
           + Add Specialty
         </button>
+      </div>
 
-        {showSpecialtyForm && (
-          <div className="overlay">
-            <div className="modal"
-              style={{
-                position: "fixed",
-                inset: 0,
-                background: "rgba(0,0,0,0.4)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-
-              <form className="card" onSubmit={handleSubmit}>
-                <h2>Add Specialty</h2>
-                <input
-                  type="text"
-                  name="specialty"
-                  value={name}
-                  placeholder="Enter specialty"
-                  className="input"
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <textarea
-                  name="description"
-                  value={description}
-                  placeholder="Enter description"
-                  className="input"
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  style={{ width: "45%", margin: "0px 5px" }}
-                >
+      {showSpecialtyForm && (
+        <div className="overlay">
+          <div className="modal-backdrop">
+            <form className="card  modal-card" onSubmit={handleSubmit}>
+              <h2>Add Specialty</h2>
+              <input
+                type="text"
+                name="specialty"
+                value={name}
+                placeholder="Enter specialty"
+                className="input"
+                onChange={(e) => setName(e.target.value)}
+              />
+              <textarea
+                name="description"
+                value={description}
+                placeholder="Enter description"
+                className="input"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <div className="modal-actions">
+                <button type="submit" className="btn-primary">
                   Save
                 </button>
                 <button
                   type="button"
                   className="btn-ghost"
-                  style={{ width: "45%", margin: "0px 5px" }}
                   onClick={() => setShowSpecialtyForm(false)}
                 >
                   Cancel
                 </button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
-        )}
-
-        <div>
+        </div>
+      )}
+      <div id="main">
+        <section className="doctor-grid">
           <Link to="/doctors/specialties/">
-            <h3>Specialities</h3>
+            <div className="card doctor-card">
+                <h3 className="titile">Specialities</h3>
+            </div>
           </Link>
-        </div>
 
-        <div>
           <Link to="/doctors/me/">
-            <h3>My Profile</h3>
+            <div className="card doctor-card">
+                <h3>My Profile</h3>
+            </div>
           </Link>
-        </div>
-
-        <div>
+        </section>
+        <section>
           <Link to="/doctor/appointments">
-            <h3>My Appointments</h3>
+            <div className="card doctor-card">
+                <h3>My Appointments</h3>
+            </div>
           </Link>
-        </div>
 
-        <div>
           <Link to="/availability">
-          <h3>My Availability</h3>
+            <div className="card doctor-card">
+              <h3>My Availability</h3>
+            </div>
           </Link>
-        </div>
+        </section>
       </div>
     </div>
   );
