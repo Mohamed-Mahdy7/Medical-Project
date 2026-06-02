@@ -33,8 +33,6 @@ export function DoctorProvider({ children }) {
 
     async function fetchSpecialities() {
         const result = await getSpecialties();
-        console.log(result.data);
-        console.log(Array.isArray(result.data));
         setSpecialties(result.data.results);
     }
 

@@ -1,43 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getDoctors } from "../../services/doctorservice";
 import { DoctorContext, DoctorProvider } from "../../context/DoctorContext";
+
+
 export default function DoctorProfile() {
-  const [doctor, setDoctor] = useState(DoctorContext.doctor);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-
-    const fetchDoctor = async () => {
-      try {
-        setLoading(true);
-        const res = await getDoctor();
-        setDoctor(res.data);
-      } catch (err) {
-        setError("Failed to load doctor profile");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDoctor();
-  }, []);
+  const { doctorProfile, loading } = useContext(DoctorContext);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!doctor) return <p>No doctor found</p>;
 
+  if (!doctorProfile) {
+    return <p>Profile not created yet!</p>
+  }
+
+  console.log(doctorProfile)
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Doctor Profile</h2>
+      <h1>Doctor Profile</h1>
 
       <div style={{ marginTop: "20px" }}>
-        <h3>Dr. {doctor.name}</h3>
-        <p><b>Specialty:</b> {doctor.specialty}</p>
-        <p><b>Profile Picture:</b> {doctor.profile_picture}</p>
-        <p><b>Phone:</b> {doctor.phone}</p>
-        <p><b>Bio:</b> {doctor.bio}</p>
-        <p><b>Experience:</b> {doctor.years_of_experience} years</p>
+        <h2>
+          Dr. {doctorProfile.user.first_name} {doctorProfile.user.last_name}
+        </h2>
+        <p>
+          <b>Specialty:</b> 
+          {doctorProfile.specialty?.name}
+        </p>
+        <p>
+          <b>Profile Picture:</b> 
+          {doctorProfile.profile_picture}
+        </p>
+        <p>
+          <b>Phone:</b> 
+          {doctorProfile.phone}
+        </p>
+        <p>
+          <b>Bio:</b> 
+          {doctorProfile.bio}
+        </p>
+        <p>
+          <b>Experience:</b> 
+          {doctorProfile.years_of_experience} years
+        </p>
       </div>
     </div>
   );
