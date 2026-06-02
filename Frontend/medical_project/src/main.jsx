@@ -4,8 +4,6 @@ import './styles/variables.css'
 import './styles/theme-light.css'
 import './styles/theme-dark.css'
 import './styles/base.css'
-// import './styles/utilities.css'
-import './styles/index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext.jsx";
