@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from .models import Appointment
 from availability.models import Availability
+from .emails import send_booking_confirmation, send_confirmation_notification, send_cancellation_notification
 
 class AppointmentDetailSerializer(serializers.ModelSerializer):
     patient_name = serializers.SerializerMethodField()
@@ -101,11 +102,19 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
             is_active=True
         ).first()
 
-        return Appointment.objects.create(
+        appointment = Appointment.objects.create(
             patient=patient,
             availability=availability,
             **validated_data
         )
+    
+        try:
+            send_booking_confirmation(appointment)
+        except Exception as e:
+            print(f"Failed to send booking email: {e}")
+
+        
+        return appointment
 
 
 class AppointmentPatientUpdateSerializer(serializers.ModelSerializer):
@@ -124,6 +133,19 @@ class AppointmentPatientUpdateSerializer(serializers.ModelSerializer):
                 f"Cannot cancel an appointment with status '{self.instance.status}'."
             )
         return attrs
+    
+    def update(self, instance, validated_data):
+        old_status = instance.status
+        instance = super().update(instance, validated_data)
+        new_status = instance.status
+
+        if old_status != Appointment.Status.CANCELLED and new_status == Appointment.Status.CANCELLED:
+            try:
+                send_cancellation_notification(instance)
+            except Exception as e:
+                print(f"Failed to send cancellation email: {e}")
+
+        return instance    
 
 
 class AppointmentDoctorUpdateSerializer(serializers.ModelSerializer):
@@ -144,6 +166,25 @@ class AppointmentDoctorUpdateSerializer(serializers.ModelSerializer):
                 f"Cannot modify an appointment with status '{self.instance.status}'."
             )
         return attrs
+    
+    def update(self, instance, validated_data):
+        old_status = instance.status
+        instance = super().update(instance, validated_data)
+        new_status = instance.status
+
+        if old_status != Appointment.Status.CONFIRMED and new_status == Appointment.Status.CONFIRMED:
+            try:
+                send_confirmation_notification(instance)
+            except Exception as e:
+                print(f"Failed to send confirmation email: {e}")
+
+        if old_status != Appointment.Status.CANCELLED and new_status == Appointment.Status.CANCELLED:
+            try:
+                send_cancellation_notification(instance)
+            except Exception as e:
+                print(f"Failed to send cancellation email: {e}")
+
+        return instance
 
 class AppointmentRescheduleSerializer(serializers.ModelSerializer):
     class Meta:
