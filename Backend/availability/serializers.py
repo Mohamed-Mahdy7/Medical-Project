@@ -1,23 +1,13 @@
 from rest_framework import serializers
 from .models import Availability
 from appointments.models import Appointment
+from rest_framework.exceptions import ValidationError
 class AvailabilitySerializer(serializers.ModelSerializer):
-    is_booked = serializers.SerializerMethodField()
+    
     class Meta:
         model = Availability
-        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'price', 'is_active', 'is_booked']
-        read_only_fields = ['id', 'is_booked']
-
-    def get_is_booked(self, obj):
-        return Appointment.objects.filter(
-            doctor=obj.doctor,
-            status__in=[
-                Appointment.Status.PENDING,
-                Appointment.Status.CONFIRMED,
-            ],
-            start_time__time__gte=obj.start_time,
-            end_time__time__lte=obj.end_time,
-        ).exists()
+        fields = ['id', 'day_of_week', 'start_time', 'end_time', 'slot_duration_minutes', 'price', 'is_active', 'appointments']
+        read_only_fields = ['id', 'appointments']
 
     def validate(self, data):
         request = self.context.get('request')
@@ -52,6 +42,8 @@ class AvailabilitySerializer(serializers.ModelSerializer):
         return Availability.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        if instance.appointments.exists():
+            raise ValidationError("Cannot perform update - Already booked")
         validated_data.pop('doctor', None)  
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

@@ -35,12 +35,14 @@ def generate_available_slots(doctor_id, date):
         slot_end = datetime.combine(date, availability.end_time)
         delta = timedelta(minutes=availability.slot_duration_minutes)
 
+        availability_id = availability.id
         current = slot_start
         while current + delta <= slot_end:
             if current.time() not in booked_times:
-                available_slots.append(current.time().strftime('%H:%M'))
+                available_slots.append([availability_id ,current.time().strftime('%H:%M')])
             current += delta
-
+        
+        test = available_slots
     return available_slots, slot_duration
 
     

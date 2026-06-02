@@ -62,7 +62,7 @@ function PatientBooking() {
     }
 
     function handleSelectSlot(slot) {
-        setSelectedSlot(slot);
+        setSelectedSlot(slot[1]);
         setStep(STEPS.CONFIRM);
     }
 
@@ -79,7 +79,8 @@ function PatientBooking() {
                 end_time: endDateTime.toISOString(),
             });
             setStep(STEPS.SUCCESS);
-        } catch {
+        } catch (error){
+            console.log(error)
             setError("Failed to book appointment.");
         } finally {
             setBooking(false);
@@ -254,7 +255,7 @@ function PatientBooking() {
                                         className={selectedSlot === slot ? "btn-primary" : "btn-ghost"}
                                         onClick={() => handleSelectSlot(slot)}
                                     >
-                                        {slot}
+                                        {slot[1]}
                                     </button>
                                 ))}
                             </div>
