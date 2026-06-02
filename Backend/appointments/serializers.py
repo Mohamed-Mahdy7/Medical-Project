@@ -23,7 +23,7 @@ class AppointmentDetailSerializer(serializers.ModelSerializer):
             "end_time",
             "notes",
             "created_at",
-            "updated_at",
+            "updated_at"
         ]
         read_only_fields = ["id", "created_at", "updated_at", "status"]
 
@@ -88,10 +88,24 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
         return attrs
         
     def create(self, validated_data):
-        request = self.context.get("request")
-        patient = request.user.patient_profile
+        patient = self.context["request"].user.patient_profile
 
-        return Appointment.objects.create(patient=patient, **validated_data)
+        doctor = validated_data["doctor"]
+        start_time = validated_data["start_time"]
+
+        availability = Availability.objects.filter(
+            doctor=doctor,
+            day_of_week=start_time.weekday(),
+            start_time__lte=start_time.time(),
+            end_time__gt=start_time.time(),
+            is_active=True
+        ).first()
+
+        return Appointment.objects.create(
+            patient=patient,
+            availability=availability,
+            **validated_data
+        )
 
 
 class AppointmentPatientUpdateSerializer(serializers.ModelSerializer):

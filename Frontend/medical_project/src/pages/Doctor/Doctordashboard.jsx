@@ -90,7 +90,7 @@ export default function DoctorDashboard() {
         </div>
 
         <div>
-          <Link to="/doctor/availability">
+          <Link to="/availability">
             My Availability
           </Link>
         </div>
