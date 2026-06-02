@@ -23,6 +23,7 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
     specialty = SpecialtySerializer(read_only=True)
     available_slots = serializers.SerializerMethodField()
     slot_duration_minutes = serializers.SerializerMethodField()
+    available_days = serializers.SerializerMethodField()
     class Meta:
         model = DoctorProfile
         fields = [
