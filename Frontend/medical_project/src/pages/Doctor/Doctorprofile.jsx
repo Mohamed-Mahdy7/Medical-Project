@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDoctor } from "../../services/doctorservice";
+import { getDoctors } from "../../services/doctorservice";
 import { DoctorContext, DoctorProvider } from "../../context/DoctorContext";
 export default function DoctorProfile() {
   const [doctor, setDoctor] = useState(DoctorContext.doctor);

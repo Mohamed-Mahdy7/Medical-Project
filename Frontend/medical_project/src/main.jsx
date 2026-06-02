@@ -9,13 +9,16 @@ import './styles/index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { DoctorProvider } from './context/DoctorContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <DoctorProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </DoctorProvider>
     </AuthProvider>
   </StrictMode>,
 )

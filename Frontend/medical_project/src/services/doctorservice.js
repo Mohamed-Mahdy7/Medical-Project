@@ -1,11 +1,9 @@
 import api from "../api.js";
 
 export const getDoctors = () =>
-     
     api.get("/doctors/");
 
-export const getDoctor = () =>
-   
+export const getDoctorProfile = () =>
     api.get("/doctors/me/");
 
 export const getDoctorSlots = (id) =>
@@ -17,6 +15,5 @@ export const getSpecialties = () =>
 export const getSpecialty = (id) =>
     api.get(`/doctors/specialties/${id}/`);
 
-export const createSpecialty = (name) =>
-    api.post("/doctors/specialties/", { name });
- 
+export const createSpecialty = (name, description) =>
+    api.post("/doctors/specialties/", { name, description });

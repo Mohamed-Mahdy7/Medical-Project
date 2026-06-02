@@ -14,6 +14,7 @@ import DoctorDashboard from './pages/Doctor/Doctordashboard'
 import DoctorProfile from './pages/Doctor/Doctorprofile'
 import DoctorAppointments from './pages/Doctor/DoctorAppointments';
 import DoctorsList from './pages/Doctor/Doctorlist'
+import DoctorsSpecialities from "./pages/Doctor/DoctorSpeciality";
 import PatientProfile from './components/patients/Patients'
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
                 <AvailabilityPage />
               </ProtectedRoute>
               } />
-            <Route path="doctor/profile/me" element={
+            <Route path="/doctors/me/" element={
               <ProtectedRoute>
                 <DoctorProfile />
               </ProtectedRoute>
@@ -55,7 +56,14 @@ function App() {
               </ProtectedRoute>
               } />
             <Route path="doctor/appointments" element={
-              <DoctorAppointments />
+              <ProtectedRoute>
+                <DoctorAppointments />
+              </ProtectedRoute>
+              } />
+            <Route path="doctors/specialties/" element={
+              <ProtectedRoute>
+                <DoctorsSpecialities />
+              </ProtectedRoute>
               } />
           </Routes>
         </div>
