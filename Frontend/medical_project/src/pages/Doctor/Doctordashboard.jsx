@@ -1,5 +1,4 @@
-﻿import { Link } from "react-router-dom";
-import DoctorProfile from "./Doctorprofile";
+﻿import { Link, useNavigate } from "react-router-dom";
 import { DoctorContext } from "../../context/DoctorContext";
 import { Routes, Route } from "react-router-dom";
 import { DoctorProvider } from "../../context/DoctorContext";
@@ -7,20 +6,23 @@ import { useContext, useState } from "react";
 import { getSpecialties, getSpecialty } from "../../services/doctorservice";
 
 export default function DoctorDashboard() {
-  // const { addspeciality } = useContext(DoctorContext);
-  const [showSpecialtyForm, setShowSpecialtyForm] = useState("false");
-  // const [speciality, setSpeciality] = useState("");
+  const { addSpeciality, specialties } = useContext(DoctorContext);
+  const [showSpecialtyForm, setShowSpecialtyForm] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const success = await addspeciality(data);
+    const success = await addSpeciality(name, description);
 
     if (!success) {
       alert("Error creating a Speciality");
+      return;
     }
     
-    navigate("/doctor/list")
+    navigate("/doctors/specialties/")
   };
   return (
     <div>
@@ -47,15 +49,22 @@ export default function DoctorDashboard() {
               }}
             >
 
-              <form className="card">
+              <form className="card" onSubmit={handleSubmit}>
                 <h2>Add Specialty</h2>
                 <input
                   type="text"
                   name="specialty"
-                  value={"speciality"}
+                  value={name}
                   placeholder="Enter specialty"
                   className="input"
-                  onChange={(e) => setSpeciality(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <textarea
+                  name="description"
+                  value={description}
+                  placeholder="Enter description"
+                  className="input"
+                  onChange={(e) => setDescription(e.target.value)}
                 />
                 <button
                   type="submit"
@@ -78,20 +87,26 @@ export default function DoctorDashboard() {
         )}
 
         <div>
-          <Link to="/doctor/profile/me">
-            My Profile
+          <Link to="/doctors/specialties/">
+            <h3>Specialities</h3>
+          </Link>
+        </div>
+
+        <div>
+          <Link to="/doctors/me/">
+            <h3>My Profile</h3>
           </Link>
         </div>
 
         <div>
           <Link to="/doctor/appointments">
-            My Appointments
+            <h3>My Appointments</h3>
           </Link>
         </div>
 
         <div>
           <Link to="/availability">
-            My Availability
+          <h3>My Availability</h3>
           </Link>
         </div>
       </div>

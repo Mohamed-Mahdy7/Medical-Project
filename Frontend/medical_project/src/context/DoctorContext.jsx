@@ -1,39 +1,90 @@
- import { createContext, useEffect, useState } from "react";
-import { getDoctor,createSpecialty } from "../services/doctorservice.js";
+import { createContext, useEffect, useState } from "react";
+import { 
+    getDoctors,
+    getDoctorProfile,
+    getDoctorSlots,
+    createSpecialty,
+    getSpecialties,
+    getSpecialty
+} from "../services/doctorservice.js";
 
 export const DoctorContext = createContext();
 
 export function DoctorProvider({ children }) {
-    const [doctor, setDoctor] = useState(null);
+    const [doctors, setDoctors] = useState([]);
+    const [doctorProfile, setDoctorProfile] = useState(null);
+    const [specialties, setSpecialties] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    async function fetchDoctors() {
+        const result = await getDoctors();
+        setDoctors(result.data);
+    }
+
+    async function fetchDoctorProfile() {
+        const result = await getDoctorProfile();
+        setDoctorProfile(result.data);
+    }
+
+    async function fetchDoctorSlots(id) {
+        const result = await getDoctorSlots(id);
+        return result.data;
+    }
+
+    async function fetchSpecialities() {
+        const result = await getSpecialties();
+        setSpecialties(result.data.results);
+    }
+
+    async function fetchSpeciality(id) {
+        const result = await getSpecialty(id);
+        return result.data;
+    }
+
+    async function addSpeciality(name, description) {
+        try{
+            const result = await createSpecialty(name, description);
+            await fetchSpecialities();
+            return result.data;
+        } catch(error) {
+            console.log(error)
+            return null;
+        }
+    }
+    
     useEffect(() => {
-        const fetchDoctor = async () => {
-            try {
-                const res = await getDoctor();
-                setDoctor(res.data);
-            } catch (err) {
-                console.error("Failed to load doctor data", err);
-                setDoctor(null);
+        async function init() {
+            try{
+                await Promise.all([
+                    fetchDoctors(),
+                    fetchDoctorProfile(),
+                    fetchSpecialities(),
+                ]);
+            } catch (error) {
+                console.log(error)
             } finally {
                 setLoading(false);
             }
-        };
-
-        fetchDoctor();
-    }, []);
-    async function addspeciality(data) {
-        try { await createSpecialty(data); return true; } 
-        
-        catch (err) {
-            console.error("Failed to create specialty", err);
-            return false;
         }
-    }
+        init();
+    }, []);
+    
 
     return (
-        <DoctorContext.Provider value={{ doctor, loading, addspeciality }}>
-            {children}
+        <DoctorContext.Provider 
+            value={{
+                doctors,
+                doctorProfile,
+                specialties,
+                loading,
+                fetchDoctors,
+                fetchDoctorProfile,
+                fetchDoctorSlots,
+                fetchSpecialities,
+                fetchSpeciality,
+                addSpeciality, 
+            }}>
+        {children}
         </DoctorContext.Provider>
     );
 }
