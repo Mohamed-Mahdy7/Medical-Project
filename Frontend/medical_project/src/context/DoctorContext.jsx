@@ -23,6 +23,7 @@ export function DoctorProvider({ children }) {
 
     async function fetchDoctorProfile() {
         const result = await getDoctorProfile();
+        console.log("Doctor Profile: ", result.data)
         setDoctorProfile(result.data);
     }
 

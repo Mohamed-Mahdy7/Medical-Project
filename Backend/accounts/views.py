@@ -88,9 +88,6 @@ class LoginView(TokenObtainPairView):
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
-        print(request.COOKIES)
-        print(request.user)
-        print(request.auth)
         refresh_token = request.COOKIES.get("refresh_token")
         if refresh_token:
             try:

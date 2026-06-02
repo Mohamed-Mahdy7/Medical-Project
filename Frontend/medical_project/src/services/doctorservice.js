@@ -3,8 +3,10 @@ import api from "../api.js";
 export const getDoctors = () =>
     api.get("/doctors/");
 
-export const getDoctorProfile = () =>
-    api.get("/doctors/me/");
+export const getDoctorProfile = () => {
+    console.log("Calling for profile")
+    return api.get("/doctors/me/");
+}
 
 export const getDoctorSlots = (id) =>
     api.get(`/doctors/${id}/slots/`);
