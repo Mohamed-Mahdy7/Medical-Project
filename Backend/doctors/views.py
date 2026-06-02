@@ -19,7 +19,7 @@ class DoctorViewSet(viewsets.ModelViewSet):
 
     @action(
     detail=False,
-    methods=['get', 'put']
+    methods=['get', 'put'],
     permission_classes=[IsAuthenticated],
     url_path="me",
     )
