@@ -32,7 +32,7 @@ export default function AvailabilityList() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this availability slot?')) return;
     const result = await removeAvailability(id);
-    if (!result.success) alert('Failed to delete.');
+    if (!result.success) alert('Cannot perform delete - Already booked');
   };
 
   const handleEditOpen = (a) => {
@@ -40,7 +40,7 @@ export default function AvailabilityList() {
     setEditErrors({});
     setEditData({
       day_of_week:            a.day_of_week,
-      start_time:             a.start_time.slice(0, 5),   // "HH:MM"
+      start_time:             a.start_time.slice(0, 5),  
       end_time:               a.end_time.slice(0, 5),
       slot_duration_minutes:  a.slot_duration_minutes,
       price:                  a.price,
@@ -88,13 +88,12 @@ export default function AvailabilityList() {
     });
     setEditLoading(false);
 
+    console.log(result);
+
     if (result.success) {
       handleEditCancel();
     } else {
-      const backendErrors = {};
-      for (const [key, val] of Object.entries(result.errors))
-        backendErrors[key] = Array.isArray(val) ? val[0] : val;
-      setEditErrors(backendErrors);
+      alert("Cannot perform update - Already booked");
     }
   };
 
