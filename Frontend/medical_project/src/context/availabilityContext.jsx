@@ -33,11 +33,18 @@ export function AvailabilityProvider({ children }) {
 
   async function editAvailability(id, data) {
     try {
-      await updateAvailability(id, data);
+      const response = await updateAvailability(id, data);
+      console.log("SUCCESS:", response);
+
       await listAvailability();
       return { success: true };
     } catch (error) {
-      return { success: false, errors: error.response?.data || {} };
+      console.log("ERROR:", error.response?.data);
+
+      return {
+        success: false,
+        errors: error.response?.data || {},
+      };
     }
   }
 
