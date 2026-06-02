@@ -81,6 +81,7 @@ function PatientBooking() {
             setStep(STEPS.SUCCESS);
         } catch (error){
             console.log(error)
+            alert("You don't have permission to book")
             setError("Failed to book appointment.");
         } finally {
             setBooking(false);
@@ -183,6 +184,7 @@ function PatientBooking() {
                     {filteredDoctors.length === 0 ? (
                         <p>No doctors found.</p>
                     ) : (
+                        console.log(filteredDoctors),
                         filteredDoctors.map(doctor => (
                             <div
                                 key={doctor.id}
@@ -192,7 +194,9 @@ function PatientBooking() {
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                                     <div>
                                         <h4>Dr. {doctor.user.first_name} {doctor.user.last_name}</h4>
-                                        <small>{doctor.specialty.name} · {doctor.years_of_experience} yrs experience</small>
+                                        {doctor.speciality &&
+                                            <small>{doctor.specialty.name} · {doctor.years_of_experience} yrs experience</small>
+                                        }
                                         {doctor.bio && (
                                             <p style={{ marginTop: "0.375rem", fontSize: "0.875rem" }}>
                                                 {doctor.bio}
@@ -229,7 +233,9 @@ function PatientBooking() {
                 <div>
                     <div className="card" style={{ marginBottom: "1.25rem" }}>
                         <h4>Dr. {selectedDoctor.user.first_name} {selectedDoctor.user.last_name}</h4>
-                        <small>{selectedDoctor.specialty.name}</small>
+                        {selectedDoctor.speciality &&
+                            <small>{selectedDoctor.specialty.name}</small>
+                        }
                     </div>
 
                     <div className="form-group">
@@ -299,7 +305,9 @@ function PatientBooking() {
                         </div>
                         <div className="form-group">
                             <label>Specialty</label>
-                            <p>{selectedDoctor.specialty.name}</p>
+                            {selectedDoctor.speciality &&
+                                <p>{selectedDoctor.specialty.name}</p>
+                            }
                         </div>
                         <div className="form-group">
                             <label>Date</label>

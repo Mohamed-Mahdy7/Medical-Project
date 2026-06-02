@@ -18,6 +18,19 @@ class DoctorViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorProfileSerializer
 
     @action(
+    detail=False,
+    methods=['get', 'put']
+    permission_classes=[IsAuthenticated],
+    url_path="me",
+    )
+    def me(self, request):
+        print("request.user:", request.user)
+        print("Doctor Profile:", request.user.doctor_profile)
+        print("Profile User:", request.user.doctor_profile.user)
+        serializer=DoctorProfileSerializer(request.user.doctor_profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
     detail=True,
     methods=['get'],
     permission_classes=[IsAuthenticated],
@@ -59,9 +72,3 @@ class DoctorViewSet(viewsets.ModelViewSet):
                 "slot_duration_minutes": slot_duration
             }
         }, status=status.HTTP_200_OK)
-
-    @action(
-        detail=False,methods=['get', 'put'])
-    def me(self, request):
-        serializer=DoctorProfileSerializer(request.user.doctor_profile)
-        return Response(serializer.data, status=status.HTTP_200_OK)
